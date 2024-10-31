@@ -1,0 +1,18 @@
+<div class="input-group w-50">
+  <input
+    type="search"
+    class="form-control rounded"
+    placeholder="Search" aria-label="Search"
+    aria-describedby="search-addon"
+    [(ngModel)]="searchTerm"
+    (keyup.enter)="onSearch()"
+  />
+  <button
+    type="button"
+    class="btn btn-outline-primary"
+    data-mdb-ripple-init
+    (click)="onSearch()"
+  >
+    search
+  </button>
+</div>
