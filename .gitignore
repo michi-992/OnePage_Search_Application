@@ -45,6 +45,8 @@ build/
 Thumbs.db
 !/node_modules/
 
+.idea/uiDesigner.xml
+
 ### FRONTEND ###
 # node
 **/node_modules/*
@@ -64,3 +66,4 @@ frontend/scr/main/web/coverage
 frontend/scr/main/web/libpeerconnection.log
 frontend/scr/main/web/testem.log
 frontend/scr/main/web/typings
+
