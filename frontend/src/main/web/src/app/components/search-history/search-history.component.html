@@ -1,3 +1,6 @@
 <ul>
-  <li *ngFor="let searchItem of searchItems$ | async">{{searchItem.searchTerm}}</li>
+  <li *ngFor="let searchItem of searchItems$ | async">
+    <strong>{{searchItem.searchTerm}}</strong>
+    {{ searchItem.searchedAt | date:'medium' }}
+  </li>
 </ul>
