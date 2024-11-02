@@ -15,6 +15,10 @@ public class SearchItem {
 
     private LocalDateTime searchedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserProfile user;
+
     public SearchItem() {
     }
 
@@ -48,6 +52,14 @@ public class SearchItem {
 
     public LocalDateTime getSearchedAt() {
         return searchedAt;
+    }
+
+    public UserProfile getUser() {
+        return user;
+    }
+
+    public void setUser(UserProfile user) {
+        this.user = user;
     }
 
 }
