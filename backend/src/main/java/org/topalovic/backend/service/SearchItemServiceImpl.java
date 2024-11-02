@@ -20,7 +20,7 @@ public class SearchItemServiceImpl implements SearchItemService {
     }
 
     @Override
-    public List<SearchItem> getSearchItems() throws SearchItemListNotFoundException {
+    public List<SearchItem> findAll() throws SearchItemListNotFoundException {
         List<SearchItem> searchItems = searchItemRepo.findAll();
         if (searchItems.isEmpty()) {
             throw new SearchItemListNotFoundException();

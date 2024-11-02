@@ -2,6 +2,7 @@ package org.topalovic.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,9 +19,11 @@ public class SearchItemController {
 
     public SearchItemController() { }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/searchItems")
-    public List<SearchItem> getSearchItems() throws Exception {
-        return searchItemService.getSearchItems();
+    public List<SearchItem> findAll() throws Exception {
+        return searchItemService.findAll();
+    }
     }
 
     @PostMapping("/searchItems/add")

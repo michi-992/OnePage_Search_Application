@@ -43,24 +43,24 @@ public class SearchItemControllerTest {
                 new SearchItem(2L, "testTerm2")
         );
 
-        given(searchItemService.getSearchItems()).willReturn(mockSearchItems);
+        given(searchItemService.findAll()).willReturn(mockSearchItems);
 
         String expectedJson = "[{\"id\":1,\"searchTerm\":\"testTerm1\"},{\"id\":2,\"searchTerm\":\"testTerm2\"}]";
         ResultActions result = mockMvc.perform(get("/searchItems").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
 
-        verify(searchItemService).getSearchItems();
+        verify(searchItemService).findAll();
     }
 
     @Test
     public void testGetSearchItemsNotFound() throws Exception {
-        when(searchItemService.getSearchItems()).thenThrow(new SearchItemListNotFoundException());
+        when(searchItemService.findAll()).thenThrow(new SearchItemListNotFoundException());
 
         ResultActions result = mockMvc.perform(get("/searchItems"))
                 .andExpect(status().isNotFound());
 
-        verify(searchItemService).getSearchItems();
+        verify(searchItemService).findAll();
     }
 
     @Test

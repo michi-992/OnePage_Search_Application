@@ -55,7 +55,7 @@ public class SearchItemServiceTest {
         when(searchItemRepo.findAll()).thenReturn(Collections.emptyList());
 
         assertThrows(SearchItemListNotFoundException.class, () -> {
-            searchItemService.getSearchItems();
+            searchItemService.findAll();
         });
 
         verify(searchItemRepo).findAll();

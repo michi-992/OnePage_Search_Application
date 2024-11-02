@@ -6,6 +6,6 @@ import org.topalovic.backend.model.SearchItem;
 import java.util.List;
 
 public interface SearchItemService {
-    List<SearchItem> getSearchItems() throws SearchItemListNotFoundException;
+    List<SearchItem> findAll() throws SearchItemListNotFoundException;
     SearchItem addSearchItem(SearchItem searchItem);
 }
