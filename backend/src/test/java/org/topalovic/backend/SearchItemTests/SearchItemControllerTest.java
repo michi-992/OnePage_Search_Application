@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -37,6 +39,7 @@ public class SearchItemControllerTest {
     MockMvc mockMvc;
 
     @Test
+    @WithMockUser
     public void testGetSearchItems() throws Exception {
         List<SearchItem> mockSearchItems = Arrays.asList(
                 new SearchItem(1L, "testTerm1"),
@@ -54,6 +57,7 @@ public class SearchItemControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testGetSearchItemsNotFound() throws Exception {
         when(searchItemService.findAll()).thenThrow(new SearchItemListNotFoundException());
 
@@ -64,6 +68,7 @@ public class SearchItemControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void testAddSearchItem() throws Exception {
         SearchItem searchItem = new SearchItem();
         searchItem.setSearchTerm("adding new search item");
@@ -74,7 +79,8 @@ public class SearchItemControllerTest {
 
         ResultActions result = mockMvc.perform(post("/searchItems/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(searchItem)))
+                        .content(new ObjectMapper().writeValueAsString(searchItem))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
 
