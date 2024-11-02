@@ -13,14 +13,9 @@ public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true)
     private String username;
-
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    private ERole role;
+    private String roles;
 
     public Long getId() {
         return id;
@@ -46,11 +41,12 @@ public class UserProfile {
         this.password = password;
     }
 
-    public ERole getRole() {
-        return role;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setRole(ERole role) {
-        this.role = role;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
+
 }
