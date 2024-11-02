@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.topalovic.backend.model.SearchItem;
+import org.topalovic.backend.model.UserProfile;
 import org.topalovic.backend.service.SearchItemService;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public class SearchItemController {
     public List<SearchItem> findAll() throws Exception {
         return searchItemService.findAll();
     }
+
+    @GetMapping("/searchItems/user")
+    public List<SearchItem> findByUser(UserProfile user) throws Exception {
+        return searchItemService.findByUser(user);
     }
 
     @PostMapping("/searchItems/add")
