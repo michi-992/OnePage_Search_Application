@@ -34,7 +34,6 @@ import org.topalovic.backend.repository.UserRepository;
 import org.topalovic.backend.security.jwt.JwtUtils;
 import org.topalovic.backend.security.services.UserDetailsImpl;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
