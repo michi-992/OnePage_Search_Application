@@ -1,4 +1,4 @@
-package org.topalovic.backend.security.jwt;
+package org.topalovic.backend.config.utility;
 
 import java.security.Key;
 import java.util.Date;
@@ -16,7 +16,7 @@ import org.springframework.web.util.WebUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.topalovic.backend.security.services.UserDetailsImpl;
+import org.topalovic.backend.service.UserDetailsImpl;
 
 @Component
 public class JwtUtils {
