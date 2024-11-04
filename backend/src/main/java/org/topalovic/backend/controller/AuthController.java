@@ -1,10 +1,5 @@
 package org.topalovic.backend.controller;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +18,7 @@ import org.topalovic.backend.payload.request.LoginRequest;
 import org.topalovic.backend.payload.request.SignupRequest;
 import org.topalovic.backend.payload.response.UserInfoResponse;
 import org.topalovic.backend.payload.response.MessageResponse;
-import org.topalovic.backend.security.services.AuthService;
+import org.topalovic.backend.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")

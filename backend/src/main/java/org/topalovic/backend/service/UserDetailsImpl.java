@@ -1,4 +1,4 @@
-package org.topalovic.backend.security.services;
+package org.topalovic.backend.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

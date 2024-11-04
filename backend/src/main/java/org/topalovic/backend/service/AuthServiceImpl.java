@@ -1,4 +1,4 @@
-package org.topalovic.backend.security.services;
+package org.topalovic.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
@@ -13,7 +13,7 @@ import org.topalovic.backend.payload.request.SignupRequest;
 import org.topalovic.backend.payload.response.UserInfoResponse;
 import org.topalovic.backend.repository.RoleRepository;
 import org.topalovic.backend.repository.UserRepository;
-import org.topalovic.backend.security.jwt.JwtUtils;
+import org.topalovic.backend.config.utility.JwtUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class AuthService {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
     UserRepository userRepository;
