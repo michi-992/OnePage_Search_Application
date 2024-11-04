@@ -117,4 +117,16 @@ public class SecurityConfigTest {
         assertThrows(BadCredentialsException.class, () -> authController.authenticateUser(loginRequest));
     }
 
+
+    @Test
+    public void testLogoutUser() {
+        ResponseCookie cookie = ResponseCookie.from("jwt", "").maxAge(0).path("/api").build();
+        when(authService.logoutUser()).thenReturn(cookie);
+
+        ResponseEntity<?> responseEntity = authController.logoutUser();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(cookie.toString(), responseEntity.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
+        assertEquals(new MessageResponse("You've been signed out!"), responseEntity.getBody());
+    }
 }
