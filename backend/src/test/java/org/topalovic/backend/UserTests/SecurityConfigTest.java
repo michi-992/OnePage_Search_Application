@@ -117,6 +117,31 @@ public class SecurityConfigTest {
         assertThrows(BadCredentialsException.class, () -> authController.authenticateUser(loginRequest));
     }
 
+    @Test
+    public void testRegisterUser_Success() {
+        SignupRequest signUpRequest = new SignupRequest("testUser", "testUser@example.com", "testPassword", null);
+        String responseMessage = "User registered successfully!";
+
+        when(authService.registerUser(signUpRequest)).thenReturn(responseMessage);
+
+        ResponseEntity<?> responseEntity = authController.registerUser(signUpRequest);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(new MessageResponse(responseMessage), responseEntity.getBody());
+    }
+
+    @Test
+    public void testRegisterUser_Error() {
+        SignupRequest signUpRequest = new SignupRequest("testUser", "testUser@example.com", "testPassword", null);
+        String responseMessage = "Error: Username is already taken!";
+
+        when(authService.registerUser(signUpRequest)).thenReturn(responseMessage);
+
+        ResponseEntity<?> responseEntity = authController.registerUser(signUpRequest);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(new MessageResponse(responseMessage), responseEntity.getBody());
+    }
 
     @Test
     public void testLogoutUser() {
