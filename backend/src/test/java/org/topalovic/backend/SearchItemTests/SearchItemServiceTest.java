@@ -30,8 +30,6 @@ public class SearchItemServiceTest {
     @InjectMocks
     SearchItemServiceImpl searchItemService;
 
-    @Autowired
-    SearchItemRepository realSearchItemRepo;
 
     @Test
     public void getSearchItems() throws Exception {
