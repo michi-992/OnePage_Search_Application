@@ -13,7 +13,7 @@ import org.topalovic.backend.service.SearchItemService;
 
 import java.util.List;
 
-@RestController
+@RestController("/api/")
 public class SearchItemController {
     @Autowired
     private SearchItemService searchItemService;
@@ -26,11 +26,13 @@ public class SearchItemController {
         return searchItemService.findAll();
     }
 
-    @GetMapping("/searchItems/user")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/searchItemsByUser")
     public List<SearchItem> findByUser(UserProfile user) throws Exception {
         return searchItemService.findByUser(user);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/searchItems/add")
     public ResponseEntity<SearchItem> addSearchItem(@RequestBody SearchItem searchItem) {
         SearchItem savedSearchItem = searchItemService.addSearchItem(searchItem);
