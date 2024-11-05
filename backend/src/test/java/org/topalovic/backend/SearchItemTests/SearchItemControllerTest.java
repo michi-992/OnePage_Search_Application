@@ -49,7 +49,7 @@ public class SearchItemControllerTest {
         given(searchItemService.findAll()).willReturn(mockSearchItems);
 
         String expectedJson = "[{\"id\":1,\"searchTerm\":\"testTerm1\"},{\"id\":2,\"searchTerm\":\"testTerm2\"}]";
-        ResultActions result = mockMvc.perform(get("/searchItems").contentType(MediaType.APPLICATION_JSON))
+        ResultActions result = mockMvc.perform(get("/api/searchItems").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
 
@@ -61,7 +61,7 @@ public class SearchItemControllerTest {
     public void testGetSearchItemsNotFound() throws Exception {
         when(searchItemService.findAll()).thenThrow(new SearchItemListNotFoundException());
 
-        ResultActions result = mockMvc.perform(get("/searchItems"))
+        ResultActions result = mockMvc.perform(get("/api/searchItems"))
                 .andExpect(status().isNotFound());
 
         verify(searchItemService).findAll();
@@ -77,7 +77,7 @@ public class SearchItemControllerTest {
         String expectedJson = new ObjectMapper().writeValueAsString(searchItem);
         when(searchItemService.addSearchItem(any(SearchItem.class))).thenReturn(searchItem);
 
-        ResultActions result = mockMvc.perform(post("/searchItems/add")
+        ResultActions result = mockMvc.perform(post("/api/searchItems/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(searchItem))
                         .with(csrf()))

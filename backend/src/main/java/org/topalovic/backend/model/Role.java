@@ -13,6 +13,16 @@ public class Role {
     @Column(length = 20)
     private ERole name;
 
+    @PreUpdate
+    private void preventUpdate() {
+        throw new UnsupportedOperationException("Update operation is not allowed.");
+    }
+
+    @PreRemove
+    private void preventDelete() {
+        throw new UnsupportedOperationException("Delete operation is not allowed.");
+    }
+
     public Role() {
 
     }

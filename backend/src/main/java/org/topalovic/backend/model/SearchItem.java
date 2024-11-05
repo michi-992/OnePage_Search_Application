@@ -1,6 +1,7 @@
 package org.topalovic.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ public class SearchItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String searchTerm;
 
     private LocalDateTime searchedAt;
@@ -31,6 +33,11 @@ public class SearchItem {
     public SearchItem(String searchterm) {
         this.searchTerm = searchterm;
         this.searchedAt = LocalDateTime.now();
+    }
+
+    public SearchItem(String searchTerm, UserProfile user) {
+        this.searchTerm = searchTerm;
+        this.user = user;
     }
 
     @PrePersist
