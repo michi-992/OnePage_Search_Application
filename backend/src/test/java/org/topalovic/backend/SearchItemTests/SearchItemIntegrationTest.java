@@ -238,7 +238,7 @@ public class SearchItemIntegrationTest {
     @Test
     @WithUserDetails("admin")
     public void getAllSearchItemsByAdmin() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems"));
+        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/all"));
 
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

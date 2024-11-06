@@ -49,7 +49,7 @@ public class SearchItemControllerTest {
         given(searchItemService.findAll()).willReturn(mockSearchItems);
 
         String expectedJson = "[{\"id\":1,\"searchTerm\":\"testTerm1\"},{\"id\":2,\"searchTerm\":\"testTerm2\"}]";
-        ResultActions result = mockMvc.perform(get("/api/searchItems").contentType(MediaType.APPLICATION_JSON))
+        ResultActions result = mockMvc.perform(get("/api/searchItems/all").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
 
@@ -61,7 +61,7 @@ public class SearchItemControllerTest {
     public void testGetSearchItemsNotFound() throws Exception {
         when(searchItemService.findAll()).thenThrow(new SearchItemListNotFoundException());
 
-        ResultActions result = mockMvc.perform(get("/api/searchItems"))
+        ResultActions result = mockMvc.perform(get("/api/searchItems/all"))
                 .andExpect(status().isNotFound());
 
         verify(searchItemService).findAll();

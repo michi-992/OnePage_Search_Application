@@ -11,7 +11,7 @@ import org.topalovic.backend.service.SearchItemService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/searchItems")
 public class SearchItemController {
     @Autowired
     private SearchItemService searchItemService;
@@ -19,19 +19,19 @@ public class SearchItemController {
     public SearchItemController() { }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/searchItems")
+    @GetMapping("/all")
     public List<SearchItem> findAll() throws Exception {
         return searchItemService.findAll();
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/searchItems/user/{username}")
+    @GetMapping("/user/{username}")
     public List<SearchItem> findByUser(@PathVariable("username") String username) throws Exception {
         return searchItemService.findByUserName(username);
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @PostMapping("/searchItems/add")
+    @PostMapping("/add")
     public ResponseEntity<SearchItem> addSearchItem(@RequestBody SearchItem searchItem) {
         SearchItem savedSearchItem = searchItemService.addSearchItem(searchItem);
         return ResponseEntity.ok(savedSearchItem);
