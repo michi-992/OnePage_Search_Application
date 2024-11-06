@@ -1,8 +1,13 @@
 package org.topalovic.backend.config;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -18,6 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.topalovic.backend.config.utility.AuthEntryPointJwt;
 import org.topalovic.backend.config.utility.AuthTokenFilter;
 import org.topalovic.backend.service.UserDetailsServiceImpl;
+
+import java.io.IOException;
 
 @Configuration
 @EnableMethodSecurity
@@ -56,16 +63,22 @@ public class WebSecurityConfig {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        return new AccessDeniedHandlerImpl();
+        return new AccessDeniedHandler() {
+            @Override
+            public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException, IOException {
+                // Set HTTP status to 403 (Forbidden)
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);  // 403 Forbidden
+                response.getWriter().write("Access Denied: " + accessDeniedException.getMessage());
+            }
+        };
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .exceptionHandling(exception -> {
-                    exception.authenticationEntryPoint(unauthorizedHandler);
-                    exception.accessDeniedHandler(accessDeniedHandler());
-                })
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(unauthorizedHandler)
+                        .accessDeniedHandler(accessDeniedHandler()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()

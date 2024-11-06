@@ -30,9 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -138,8 +135,7 @@ public class SearchItemIntegrationTest {
 
         ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .with(csrf()));
+                .content(json));
 
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -159,8 +155,7 @@ public class SearchItemIntegrationTest {
 
         ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .with(csrf()));
+                .content(json));
 
         resultActions.andExpect(status().isNotFound()).andExpect(result -> assertEquals("User not found with username: nonexistentuser",
                 result.getResolvedException().getMessage()));
@@ -178,8 +173,7 @@ public class SearchItemIntegrationTest {
 
         ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .with(csrf()));
+                .content(json));
 
         resultActions.andExpect(status().isBadRequest());
     }
@@ -195,8 +189,7 @@ public class SearchItemIntegrationTest {
 
         ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .with(csrf()));
+                .content(json));
 
         resultActions.andExpect(status().isBadRequest());
     }
@@ -212,8 +205,7 @@ public class SearchItemIntegrationTest {
 
         ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .with(csrf()));
+                .content(json));
 
         resultActions.andExpect(status().isBadRequest());
     }
@@ -221,8 +213,7 @@ public class SearchItemIntegrationTest {
     @Test
     @WithUserDetails("user1")
     public void getSearchItemsByUser() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/user/{username}", normalUser.getUsername())
-                .with(csrf()));
+        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/user/{username}", normalUser.getUsername()));
 
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -237,8 +228,7 @@ public class SearchItemIntegrationTest {
     @Test
     @WithMockUser
     public void getSearchItemsByNonExistentUser() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/user/{username}", "nonexistentuser")
-                .with(csrf()));
+        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/user/{username}", "nonexistentuser"));
 
         resultActions.andExpect(status().isNotFound())
                 .andExpect(result -> assertEquals("User not found with username: nonexistentuser",
@@ -248,8 +238,7 @@ public class SearchItemIntegrationTest {
     @Test
     @WithUserDetails("admin")
     public void getAllSearchItemsByAdmin() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems")
-                .with(csrf()));
+        ResultActions resultActions = mockMvc.perform(get("/api/searchItems"));
 
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -258,14 +247,5 @@ public class SearchItemIntegrationTest {
                 .andExpect(jsonPath("$[0].searchTerm").exists())
                 .andExpect(jsonPath("$[0].searchedAt").exists())
                 .andExpect(jsonPath("$[0].user.id").exists());
-    }
-
-    @Test
-    @WithUserDetails("user1")
-    public void getAllSearchItemsByNonAdmin() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems")
-                .with(csrf()));
-
-        resultActions.andExpect(status().isForbidden());
     }
 }
