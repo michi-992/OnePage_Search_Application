@@ -86,7 +86,7 @@ public class UserIntegrationTest {
     @Test
     @Transactional
     public void testRegisterUser() {
-        UserProfile user = new UserProfile("username3", "username1@example", "password1");
+        UserProfile user = new UserProfile("username1", "username1@example", "password1");
         user.setRoles(new HashSet<>(Set.of(new Role(ERole.ROLE_USER))));
 
         UserProfile registeredUser  = userRepository.save(user);
@@ -95,13 +95,13 @@ public class UserIntegrationTest {
         assertThat(registeredUser.getId()).isNotNull();
         assertThat(registeredUser.getUsername()).isEqualTo(user.getUsername());
         assertThat(registeredUser.getEmail()).isEqualTo(user.getEmail());
-        assertThat(registeredUser.getPassword()).isEqualTo(passwordEncoder.encode(user.getPassword()));
+        assertThat(registeredUser.getPassword()).isEqualTo(user.getPassword());
 
         Optional<UserProfile> retrievedUser = userRepository.findById(registeredUser.getId());
         assertThat(retrievedUser).isPresent();
         assertThat(retrievedUser.get().getUsername()).isEqualTo(user.getUsername());
         assertThat(retrievedUser.get().getEmail()).isEqualTo(user.getEmail());
-        assertThat(retrievedUser.get().getPassword()).isEqualTo(passwordEncoder.encode(user.getPassword()));
+        assertThat(retrievedUser.get().getPassword()).isEqualTo(user.getPassword());
     }
 
     @Test
@@ -112,7 +112,6 @@ public class UserIntegrationTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(user);
-        System.out.println(json);
 
         ResultActions resultActions = mockMvc.perform(post("/api/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
