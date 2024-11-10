@@ -1,11 +1,7 @@
-<div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      @if (!isLoggedIn) {
+<div class="w-25 mx-auto bg-light p-3 rounded">
+  <img src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="rounded-circle d-block w-25 mx-auto"/>
+
+  @if (!isLoggedIn) {
       <form
         name="form"
         (ngSubmit)="f.form.valid && onSubmit()"
@@ -18,7 +14,7 @@
             type="text"
             class="form-control"
             name="username"
-            [(ngModel)]="form.username"
+            [(ngModel)]="login.username"
             required
             #username="ngModel"
             [ngClass]="{ 'is-invalid': f.submitted && username.errors }"
@@ -33,7 +29,7 @@
             type="password"
             class="form-control"
             name="password"
-            [(ngModel)]="form.password"
+            [(ngModel)]="login.password"
             required
             minlength="6"
             #password="ngModel"
@@ -50,7 +46,7 @@
           </div>
           }
         </div>
-        <div class="form-group">
+        <div class="form-group d-flex justify-content-center mt-2">
           <button class="btn btn-primary btn-block">Login</button>
         </div>
         <div class="form-group">
@@ -61,8 +57,11 @@
           }
         </div>
       </form>
+
+      <div class="text-center mt-3">
+        <p>Don't have an account? <a class="button" routerLink="/register">Register</a></p>
+      </div>
       } @else {
       <div class="alert alert-success">Logged in as {{ roles }}.</div>
       }
     </div>
-  </div>
