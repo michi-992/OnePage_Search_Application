@@ -1,7 +1,7 @@
-import { Login } from './login.model';
+import { LoginData } from './login.model';
 
 describe('Login', () => {
   it('should create an instance', () => {
-    expect(new Login()).toBeTruthy();
+    expect(new LoginData()).toBeTruthy();
   });
 });

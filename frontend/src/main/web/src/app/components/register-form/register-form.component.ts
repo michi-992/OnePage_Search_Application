@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RegistrationData } from '../../models/register/registration.model'
 
 @Component({
   selector: 'app-register-form',
@@ -12,11 +13,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './register-form.component.css'
 })
 export class RegisterFormComponent {
-  form: any = {
+  registerData: RegistrationData = {
     username: null,
     email: null,
     password: null
   };
+
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
@@ -25,9 +27,7 @@ export class RegisterFormComponent {
   constructor(private authService: AuthService) { }
 
   onSubmit(): void {
-    const { username, email, password } = this.form;
-
-    this.authService.register(username, email, password).subscribe({
+    this.authService.register(this.registerData).subscribe({
       next: data => {
         console.log(data);
         this.isSuccessful = true;

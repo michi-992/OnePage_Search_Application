@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { StorageService } from '../../services/storage/storage.service';
-import { Login } from '../../models/login/login.model'
+import { LoginData } from '../../models/login/login.model'
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent implements OnInit{
-  login: Login = { username: null, password: null };
+  login: LoginData = { username: null, password: null };
 
   isLoggedIn = false;
   isLoginFailed = false;

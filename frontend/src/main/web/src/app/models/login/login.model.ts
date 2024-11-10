@@ -1,4 +1,4 @@
-export interface Login {
+export interface LoginData {
   username?: string | null;
   password?: string | null;
 }
