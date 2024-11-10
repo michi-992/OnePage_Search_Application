@@ -5,6 +5,7 @@ import { StorageService } from '../../services/storage/storage.service';
 import { LoginData } from '../../models/login/login.model'
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { User } from '../../models/user/user.model';
 
 @Component({
   selector: 'app-login-form',
@@ -33,7 +34,13 @@ export class LoginFormComponent implements OnInit{
   onSubmit(): void {
     this.authService.login(this.login).subscribe({
       next: data => {
-        this.storageService.saveUser(data);
+        const user: User = {
+          id: data.id,
+          username: data.username,
+          email: data.username,
+          roles: data.roles,
+        };
+        this.storageService.saveUser(user);
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;

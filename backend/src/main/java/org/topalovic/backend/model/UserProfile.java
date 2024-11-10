@@ -41,6 +41,10 @@ public class UserProfile {
     public UserProfile() {
     }
 
+    public UserProfile(String username) {
+        this.username = username;
+    }
+
     public UserProfile(String username, String email, String password) {
         this.username = username;
         this.email = email;

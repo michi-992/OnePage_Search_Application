@@ -18,22 +18,22 @@ public class SearchItemController {
 
     public SearchItemController() { }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<SearchItem> findAll() throws Exception {
         return searchItemService.findAll();
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping("/user/{username}")
+    @PreAuthorize("hasRole('USER')")
     public List<SearchItem> findByUser(@PathVariable("username") String username) throws Exception {
         return searchItemService.findByUserName(username);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @PostMapping("/add")
-    public ResponseEntity<SearchItem> addSearchItem(@RequestBody SearchItem searchItem) {
-        SearchItem savedSearchItem = searchItemService.addSearchItem(searchItem);
+    @PostMapping("/user/{username}/add")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<SearchItem> addSearchItem(@PathVariable("username") String username, @RequestBody SearchItem searchItem) {
+        SearchItem savedSearchItem = searchItemService.addSearchItem(searchItem, username);
         return ResponseEntity.ok(savedSearchItem);
     }
 }

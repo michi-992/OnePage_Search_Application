@@ -9,5 +9,5 @@ import java.util.List;
 public interface SearchItemService {
     List<SearchItem> findAll() throws SearchItemListNotFoundException;
     List<SearchItem> findByUserName(String username) throws SearchItemListNotFoundException;
-    SearchItem addSearchItem(SearchItem searchItem);
+    SearchItem addSearchItem(SearchItem searchItem, String username);
 }

@@ -7,7 +7,6 @@ const API_URL = 'http://localhost:8080/api/test/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   responseType: 'text' as 'json',
-  withCredentials: true
 };
 
 

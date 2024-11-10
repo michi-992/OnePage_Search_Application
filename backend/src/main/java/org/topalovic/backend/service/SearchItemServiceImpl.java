@@ -42,16 +42,13 @@ public class SearchItemServiceImpl implements SearchItemService {
     }
 
     @Override
-    public SearchItem addSearchItem(SearchItem searchItem) {
+    public SearchItem addSearchItem(SearchItem searchItem, String username) {
         if (searchItem.getSearchTerm() == null || searchItem.getSearchTerm().trim().isEmpty()) {
             throw new BadRequestException("Search term must not be empty or null");
         }
 
-        if (searchItem.getUser() == null) {
-            throw new BadRequestException("User must not be null");
-        } else {
-            UserProfile user = userRepo.findByUsername(searchItem.getUser().getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + searchItem.getUser().getUsername()));
-        }
+        UserProfile user = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + searchItem.getUser().getUsername()));
+        searchItem.setUser(user);
 
         return searchItemRepo.save(searchItem);
     }

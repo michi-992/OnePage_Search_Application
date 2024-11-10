@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
   styleUrl: './search-history.component.css'
 })
 export class SearchHistoryComponent {
-  searchItems$: Observable<SearchItem[]>;
+  searchItems$: Observable<any[]>;
   constructor(private searchDataService: SearchDataService) {
-      this.searchItems$ = this.searchDataService.getSearchItems();
+      this.searchItems$ = this.searchDataService.getSearchItemsByUser();
     }
 }
