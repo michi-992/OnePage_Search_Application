@@ -1,0 +1,8 @@
+<ul class="w-50 mx-auto mt-3">
+  <li *ngFor="let searchItem of searchItems$ | async">
+    <strong>{{searchItem.user?.username}}</strong> -
+    <i>"{{searchItem.searchTerm}}"</i>
+    <br>
+    {{ searchItem.searchedAt | date:'medium' }}
+  </li>
+</ul>

@@ -2,9 +2,18 @@
   <div class="container-fluid">
     <ng-container *ngIf="isLoggedIn">
       <span class="navbar-text me-3">
+        <a routerLink="/">
         Welcome, <strong>{{ username }}</strong>
+        </a>
       </span>
-      <button class="btn btn-primary" (click)="logout()">Logout</button>
+      <div>
+        <ng-container *ngIf="showAdminBoard">
+          <button class="btn btn-secondary me-3" routerLink="/admin/search-history">Admin View</button>
+        </ng-container>
+
+        <button class="btn btn-primary" (click)="logout()">Logout</button>
+
+      </div>
     </ng-container>
   </div>
 </nav>

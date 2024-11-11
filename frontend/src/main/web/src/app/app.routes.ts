@@ -4,6 +4,7 @@ import { RegisterFormComponent } from './components/register-form/register-form.
 import { SearchPageComponent } from './components/search-page/search-page.component'
 import { BoardUserComponent } from './components/board-user/board-user.component';
 import { BoardAdminComponent } from './components/board-admin/board-admin.component';
+import { FullSearchListComponent } from './components/full-search-list/full-search-list.component';
 import { authGuard, authGuardRedirect } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -12,6 +13,7 @@ export const routes: Routes = [
     {path: '', component: SearchPageComponent, canActivate: [authGuard]},
     {path: 'user', component: BoardUserComponent, canActivate: [authGuard]},
     {path: 'admin', component: BoardAdminComponent, canActivate: [authGuard]},
+    {path: 'admin/search-history', component: FullSearchListComponent, canActivate: [authGuard]},
 ];
 
 
