@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { SearchItem } from '../../models/search-item/search-item.model'
 import { StorageService } from '../storage/storage.service';
 
@@ -15,6 +15,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class SearchDataService {
+  private searchUpdated = new Subject<void>();
+
   constructor(private http: HttpClient, private storageService: StorageService) { }
 
   getSearchItemsByUser(): Observable<any> {
@@ -23,6 +25,14 @@ export class SearchDataService {
 
   addSearchItem(searchItem: SearchItem): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(API_URL + 'user/' + this.storageService.getUser().username + '/add', searchItem, httpOptions );
-  }
+    return this.http.post(API_URL + 'user/' + this.storageService.getUser().username + '/add', searchItem, httpOptions )
+      .pipe(
+        tap(() => this.searchUpdated.next())
+      );
+    }
+
+  getSearchUpdatedListener(): Observable<void> {
+      return this.searchUpdated.asObservable();
+    }
+
 }

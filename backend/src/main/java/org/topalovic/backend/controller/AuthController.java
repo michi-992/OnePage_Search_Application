@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,15 +34,20 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        try {
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        UserInfoResponse userInfoResponse = authService.signInUser(authentication);
-        ResponseCookie jwtCookie = authService.signInCookie(authentication);
+            UserInfoResponse userInfoResponse = authService.signInUser(authentication);
+            ResponseCookie jwtCookie = authService.signInCookie(authentication);
 
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(userInfoResponse);
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .body(userInfoResponse);
+        } catch (BadCredentialsException e){
+            return ResponseEntity.badRequest().body(new MessageResponse("Invalid username or password"));
+        }
+
     }
 
     @PostMapping("/signup")

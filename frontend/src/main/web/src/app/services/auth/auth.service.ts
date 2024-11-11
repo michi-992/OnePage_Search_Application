@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { LoginData } from '../../models/login/login.model'
 import { RegistrationData } from '../../models/register/registration.model'
 
