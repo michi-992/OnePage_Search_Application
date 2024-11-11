@@ -1,6 +1,10 @@
 # One Page Application with Search Functionality
 
-This project is a Maven-based parent project consisting of two child modules: a backend and a frontend. The backend is a Spring Boot (version 3.3.4) application, while the frontend is built with Angular (version 17). The application for now only provides basic a search functionality where users can add search items to a databse and have them displayed.
+This project is a Maven-based parent project consisting of two child modules: a backend and a frontend.
+The backend is a Spring Boot (version 3.3.4) application with Spring Security integration.
+The frontend is built with Angular (version 18).
+The application provides a search functionality where users can add search items to a database and have them displayed.
+Additionally, the project includes a login, registration, homepage (search view), and admin view of all searches.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -9,7 +13,9 @@ This project is a Maven-based parent project consisting of two child modules: a 
 - [Database Configuration](#database-configuration)
 - [Backend Setup](#backend-setup)
 - [Frontend Setup](#frontend-setup)
-- [API Endpoints](#api-endpoints)
+- [Backend Functionality](#backend-functionality)
+- [Frontend Functionality](#frontend-functionality)
+- [Learner's Note](#learners-note)
 
 ## Prerequisites 
 - Java: 23.0.1
@@ -67,8 +73,24 @@ This will compile and package both backend and frontend modules.
     spring.datasource.password=mysecretpassword
     spring.jpa.hibernate.ddl-auto=update
     spring.jpa.show-sql=true
+
 ### Switching to different Database
 If using a different database (e.g., MySQL), update your `pom.xml` accordingly and adjust the connection properties in `application.properties`.
+
+### Prepopulated Database
+The database after starting the application will include 4 tables: users, user_roles, roles, and searchItems.
+The tables will be prepopulated:
+1. **roles**  
+   - user
+   - admin
+2. **users**  
+   - normal user (username = "user1", password = "password1")
+   - an admin (username = "admin", password = "password2")
+3. **user_roles**  
+   - user1: user
+   - admin: user & admin
+4. **search_items**  
+   - two search items for the 2 users each
 
 ## Backend Setup
 
@@ -92,18 +114,80 @@ The backend runs on http://localhost:8080 by default.
 
 The frontend will be available at http://localhost:4200, unless otherwise specified.
 
-## API Endpoints
 
-The backend provides the following API endpoints
+## Backend Functionality
+### User Authentication and Authorization
 
-- GET '/searchItems'
-    -  Returns all search items saved in the database as a List.
-    -  Test with
-       ```bash
-        curl http://localhost:8080/searchItems
+- API Endpoints: POST '/auth/login', POST '/auth/register', POST '/auth/signout'
+- Steps:
+  - Users can log in, log out or register using the provided API endpoints.
+  - Upon successful login, a JWT token is returned to the user.
+  - The user can use the JWT token for subsequent authenticated requests.
 
-- POST '/searchItems'
-    -  Adds a new search item in the database.
-    -  Test with
-       ```bash
-        curl -X POST -H "Content-Type: application/json" -d '{"searchTerm": "your_search_term"}' http://localhost:8080/searchItems/add
+### Search Items Management
+
+- API Endpoints: GET '/searchItems/user/{username}', POST '/searchItems/user/{username}/add'
+- Steps:
+  - Users can fetch their search items using the GET '/searchItems' endpoint.
+  - Users can add new search items using the POST '/searchItems' endpoint.
+  - The search items are stored in the database and associated with the user.
+
+### Role-Based Access Control
+
+- Spring Security:
+  - Users with the "USER" role can access the main page.
+  - Users with the "ADMIN" role can access the admin view.
+  - Access to protected resources is controlled using Spring Security's role-based access control.
+
+### Unit and Integration Tests
+
+- Backend Tests:
+  - The backend application provides unit and integration tests. 
+  - Unit tests cover individual components and services. 
+  - Integration tests ensure the proper functioning of the application as a whole and can be used for database population.
+
+## Frontend Functionality
+
+### Login View
+
+- API Endpoint: POST '/auth/signin'
+- Steps:
+    - Navigate to the navigation view ('/login').
+    - Enter username and password (example: "user1" & "password1").
+    - Click the "Login' button.
+    - If successful, you will be redirected to the main page ('/').
+    - If already logged in, you will automatically be redirected to the main page.
+
+### Registration View
+
+- API Endpoint: POST '/auth/signup'
+- Steps:
+    - Navigate to the registration view ('/register').
+    - Enter a new username, email and password.
+    - Click the "Register" button.
+    - If successful, you will be redirected to the login view.
+    - If already logged in, you will automatically be redirected to the main page.
+    - Logout is possible by clicking the "Logout" button.
+
+### Main Page
+
+- API Endpoint: GET '/searchItems/user/{username}', POST '/searchItems/user/{username}/add'
+- Steps:
+    - Navigate to the main page ('/').
+    - Enter a search term in the input field.
+    - Click the "Search" button.
+    - The search term will be added to the database and displayed in the user's search history.
+#
+### Admin View
+
+- API Endpoint: GET '/searchItems/all'
+- Steps:
+    - Navigate to the admin view ('/admin/search-history').
+        - accessible only to users with the "ADMIN" role
+    - All search items from the database will be displayed in the admin view.
+
+
+
+## Learner's Note
+
+I am learning Spring Boot and Angular with this project and am still in the process of development. This project has a basic implementation of Spring Security and will be further improved to enhance security.
