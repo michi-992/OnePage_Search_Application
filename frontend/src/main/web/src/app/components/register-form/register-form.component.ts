@@ -29,7 +29,6 @@ export class RegisterFormComponent {
   onSubmit(): void {
     this.authService.register(this.registerData).subscribe({
       next: data => {
-        console.log(data);
         this.isSuccessful = true;
         this.isSignUpFailed = false;
       },

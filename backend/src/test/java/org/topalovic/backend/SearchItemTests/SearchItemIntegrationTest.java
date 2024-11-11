@@ -133,7 +133,7 @@ public class SearchItemIntegrationTest {
         String json = "{\"searchTerm\": \"" + searchItem.getSearchTerm() + "\", \"user\": {\"id\": " + searchItem.getUser().getId() +
                 ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
 
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
+        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/user1/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
@@ -153,7 +153,7 @@ public class SearchItemIntegrationTest {
         String json = "{\"searchTerm\": \"" + searchItem.getSearchTerm() + "\", \"user\": {\"id\": " + searchItem.getUser().getId() +
                 ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
 
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
+        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/nonexistentuser/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
@@ -171,7 +171,7 @@ public class SearchItemIntegrationTest {
         String json = "{\"searchTerm\": \"" + searchItem.getSearchTerm() + "\", \"user\":{\"id\": " + searchItem.getUser().getId() +
                 ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
 
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
+        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/" + normalUser.getUsername() + "/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
@@ -187,23 +187,7 @@ public class SearchItemIntegrationTest {
         String json = "{\"user\":{\"id\": " + searchItem.getUser().getId() +
                 ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
 
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        resultActions.andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithMockUser
-    public void testAddSearchItemWithNullUser() throws Exception {
-        SearchItem searchItem = new SearchItem();
-        searchItem.setSearchTerm("integration test item - null user");
-        searchItem.setUser(null);
-
-        String json = "{\"searchTerm\": \"" + searchItem.getSearchTerm() + "\"}";
-
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/add")
+        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/" + normalUser.getUsername() + "/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 

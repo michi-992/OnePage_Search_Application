@@ -33,7 +33,9 @@ public class SearchItemController {
     @PostMapping("/user/{username}/add")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<SearchItem> addSearchItem(@PathVariable("username") String username, @RequestBody SearchItem searchItem) {
-        SearchItem savedSearchItem = searchItemService.addSearchItem(searchItem, username);
+        UserProfile user = searchItemService.getUser(username);
+        searchItem.setUser(user);
+        SearchItem savedSearchItem = searchItemService.addSearchItem(searchItem);
         return ResponseEntity.ok(savedSearchItem);
     }
 }

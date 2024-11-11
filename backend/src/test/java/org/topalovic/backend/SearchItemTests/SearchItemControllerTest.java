@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -77,7 +78,7 @@ public class SearchItemControllerTest {
         String expectedJson = new ObjectMapper().writeValueAsString(searchItem);
         when(searchItemService.addSearchItem(any(SearchItem.class))).thenReturn(searchItem);
 
-        ResultActions result = mockMvc.perform(post("/api/searchItems/add")
+        ResultActions result = mockMvc.perform(post("/api/searchItems/user/username/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(searchItem))
                         .with(csrf()))

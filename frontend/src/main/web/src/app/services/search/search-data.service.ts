@@ -18,7 +18,6 @@ export class SearchDataService {
   constructor(private http: HttpClient, private storageService: StorageService) { }
 
   getSearchItemsByUser(): Observable<any> {
-    console.log(this.storageService.getUser().username);
     return this.http.get(API_URL + 'user/' + this.storageService.getUser().username, httpOptions);
   }
 

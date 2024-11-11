@@ -11,6 +11,7 @@ import org.topalovic.backend.repository.SearchItemRepository;
 import org.topalovic.backend.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SearchItemServiceImpl implements SearchItemService {
@@ -42,14 +43,20 @@ public class SearchItemServiceImpl implements SearchItemService {
     }
 
     @Override
-    public SearchItem addSearchItem(SearchItem searchItem, String username) {
+    public SearchItem addSearchItem(SearchItem searchItem) {
         if (searchItem.getSearchTerm() == null || searchItem.getSearchTerm().trim().isEmpty()) {
             throw new BadRequestException("Search term must not be empty or null");
         }
-
-        UserProfile user = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + searchItem.getUser().getUsername()));
-        searchItem.setUser(user);
+        if (searchItem.getUser() == null) {
+            throw new BadRequestException("User must not be null");
+        } else {
+            UserProfile user = userRepo.findByUsername(searchItem.getUser().getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + searchItem.getUser().getUsername()));
+        }
 
         return searchItemRepo.save(searchItem);
+    }
+
+    public UserProfile getUser(String username) {
+        return userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 }
