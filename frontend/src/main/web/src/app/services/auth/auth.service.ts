@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
 import { LoginData } from '../../models/login/login.model'
 import { RegistrationData } from '../../models/register/registration.model'
 
@@ -15,6 +15,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
+  private isLoggedIn = new Subject<boolean>();
 
   constructor(private http: HttpClient) {}
 
@@ -38,10 +39,24 @@ export class AuthService {
         password: registerData.password,
       },
       httpOptions
+    ).pipe(
+      tap(() =>
+      {console.log("after login " + true)
+             this.isLoggedIn.next(true)
+        }
+      )
     );
   }
 
   logout(): Observable<any> {
-    return this.http.post(AUTH_API + 'signout', { }, httpOptions);
+    return this.http.post(AUTH_API + 'signout', { }, httpOptions).pipe(
+      tap(() => {console.log("after login " + false)
+                             this.isLoggedIn.next(false)
+                        })
+      );
   }
+
+  getIsLoggedInListener(): Observable<boolean> {
+      return this.isLoggedIn.asObservable();
+    }
 }

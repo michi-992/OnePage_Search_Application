@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -9,7 +10,7 @@ import { EventBusService } from './shared/event-bus.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, NgbModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, NgbModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -21,6 +22,7 @@ export class AppComponent {
     username?: string;
 
     eventBusSub?: Subscription;
+    loggedInSub: Subscription | null = null;
 
     constructor(
       private storageService: StorageService,
@@ -44,6 +46,10 @@ export class AppComponent {
       this.eventBusSub = this.eventBusService.on('logout', () => {
         this.logout();
       });
+
+    this.loggedInSub = this.authService.getIsLoggedInListener().subscribe(isLoggedIn => {
+          this.isLoggedIn = isLoggedIn;
+        });
     }
 
     logout(): void {
