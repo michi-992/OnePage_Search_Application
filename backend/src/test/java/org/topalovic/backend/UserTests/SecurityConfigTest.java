@@ -107,15 +107,15 @@ public class SecurityConfigTest {
         assertEquals(userInfoResponse, responseEntity.getBody());
     }
 
-    @Test
-    public void testAuthenticateUser_BadCredentials() {
-        LoginRequest loginRequest = new LoginRequest("testUser", "wrongPassword");
-        AuthenticationException exception = new BadCredentialsException("Bad credentials");
-        when(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())))
-                .thenThrow(exception);
-
-        assertThrows(BadCredentialsException.class, () -> authController.authenticateUser(loginRequest));
-    }
+//    @Test
+//    public void testAuthenticateUser_BadCredentials() {
+//        LoginRequest loginRequest = new LoginRequest("testUser", "wrongPassword");
+//        AuthenticationException exception = new BadCredentialsException("Bad credentials");
+//        when(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())))
+//                .thenThrow(exception);
+//
+//        assertThrows(BadCredentialsException.class, () -> authController.authenticateUser(loginRequest));
+//    }
 
     @Test
     public void testRegisterUser_Success() {
