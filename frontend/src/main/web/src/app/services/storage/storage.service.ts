@@ -16,7 +16,7 @@ export class StorageService {
 
   public saveUser(user: User) {
     window.sessionStorage.removeItem(USER_KEY);
-    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    window.sessionStorage.setItem(USER_KEY, JSON.stringify({ username: user.username, roles: user.roles }));
   }
 
   public getUser(): any {

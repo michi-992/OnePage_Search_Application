@@ -27,7 +27,13 @@ export class AuthService {
         password: loginData.password,
       },
       httpOptions
-    );
+    ).pipe(
+           tap(() =>
+           {console.log("after login " + true)
+                  this.isLoggedIn.next(true)
+             }
+           )
+         );
   }
 
   register(registerData: RegistrationData): Observable<any> {
@@ -39,12 +45,6 @@ export class AuthService {
         password: registerData.password,
       },
       httpOptions
-    ).pipe(
-      tap(() =>
-      {console.log("after login " + true)
-             this.isLoggedIn.next(true)
-        }
-      )
     );
   }
 
