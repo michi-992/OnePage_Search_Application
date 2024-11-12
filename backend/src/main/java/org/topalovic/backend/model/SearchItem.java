@@ -18,7 +18,7 @@ public class SearchItem {
     private LocalDateTime searchedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserProfile user;
 
     public SearchItem() {
