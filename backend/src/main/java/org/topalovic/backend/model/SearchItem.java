@@ -49,6 +49,8 @@ public class SearchItem {
         return this.id;
     }
 
+    public void setId(Long id) { this.id = id; }
+
     public String getSearchTerm() {
         return this.searchTerm;
     }

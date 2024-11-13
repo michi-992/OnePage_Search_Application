@@ -1,8 +1,17 @@
-<ul class="w-50 mx-auto mt-3">
-  <li *ngFor="let searchItem of searchItems$ | async">
-    <strong>{{searchItem.user?.username}}</strong> -
-    <i>"{{searchItem.searchTerm}}"</i>
-    <br>
-    {{ searchItem.searchedAt | date:'medium' }}
-  </li>
-</ul>
+<div class="accordion w-50 mx-auto mt-3" id="userItemsAccordion">
+  <div *ngFor="let searchItem of searchItems$ | async" class="accordion-item">
+    <h2 class="accordion-header" id="heading-{{searchItem.user?.id}}">
+      <button class="accordion-button" type="button" [class.collapsed]="!getExpandedState(searchItem.user?.id)" (click)="toggleUserItems(searchItem.user?.id)">
+        {{ searchItem.user?.username }}
+      </button>
+    </h2>
+    <div [ngClass]="{'collapse': !expandedStates[searchItem.user?.id], 'accordion-collapse': true}">
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let item of searchItem.searchItems" class="list-group-item">
+          <i>"{{ item.searchTerm }}"</i><br>
+          <small>{{ item.searchedAt | date:'medium' }}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

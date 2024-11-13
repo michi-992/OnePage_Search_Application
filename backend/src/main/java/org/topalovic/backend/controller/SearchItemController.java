@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
+import org.topalovic.backend.model.UserSearchItemsDTO;
 import org.topalovic.backend.service.SearchItemService;
 
 import java.util.List;
@@ -22,6 +23,13 @@ public class SearchItemController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<SearchItem> findAll() throws Exception {
         return searchItemService.findAll();
+    }
+
+    @GetMapping("/groupedByUser")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserSearchItemsDTO>> findAllGroupedByUser() throws Exception {
+        List<UserSearchItemsDTO> searchItemsByUser = searchItemService.getItemsGroupedByUsers();
+        return ResponseEntity.ok(searchItemsByUser);
     }
 
     @GetMapping("/user/{username}")

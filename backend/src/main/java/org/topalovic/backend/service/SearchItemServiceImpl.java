@@ -7,11 +7,15 @@ import org.topalovic.backend.exceptions.BadRequestException;
 import org.topalovic.backend.exceptions.SearchItemListNotFoundException;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
+import org.topalovic.backend.model.UserSearchItemsDTO;
 import org.topalovic.backend.repository.SearchItemRepository;
 import org.topalovic.backend.repository.UserRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchItemServiceImpl implements SearchItemService {
@@ -34,6 +38,20 @@ public class SearchItemServiceImpl implements SearchItemService {
             throw new SearchItemListNotFoundException();
         }
         return searchItems;
+    }
+
+    @Override
+    public List<UserSearchItemsDTO> getItemsGroupedByUsers() throws SearchItemListNotFoundException {
+        List<SearchItem> searchItems = searchItemRepo.findAll();
+        if (searchItems.isEmpty()) {
+            throw new SearchItemListNotFoundException();
+        }
+        return searchItems.stream()
+                .collect(Collectors.groupingBy(SearchItem::getUser))
+                .entrySet()
+                .stream()
+                .map(entry -> new UserSearchItemsDTO(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 
     @Override

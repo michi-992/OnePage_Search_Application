@@ -12,10 +12,19 @@ import { Observable } from 'rxjs';
   styleUrl: './full-search-list.component.css'
 })
 export class FullSearchListComponent {
-  searchItems$: Observable<SearchItem[]>;
+  searchItems$: Observable<any>;
+  expandedStates: { [key: number]: boolean } = {};
 
   constructor(private searchDataService: SearchDataService) {
-      this.searchItems$ = this.searchDataService.getAllSearchItems();
+      this.searchItems$ = this.searchDataService.getAllSearchItemsGroupedByUser();
+    }
+
+  toggleUserItems(userId: number): void {
+      this.expandedStates[userId] = !this.expandedStates[userId];
+    }
+
+  getExpandedState(userId: number): Boolean {
+    return this.expandedStates[userId];
     }
 
 }

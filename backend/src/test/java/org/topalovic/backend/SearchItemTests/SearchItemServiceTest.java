@@ -10,17 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.topalovic.backend.exceptions.SearchItemListNotFoundException;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
+import org.topalovic.backend.model.UserSearchItemsDTO;
 import org.topalovic.backend.repository.SearchItemRepository;
 import org.topalovic.backend.repository.UserRepository;
 import org.topalovic.backend.service.SearchItemServiceImpl;
 import org.topalovic.backend.service.UserDetailsServiceImpl;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -86,5 +85,59 @@ public class SearchItemServiceTest {
         assertThat(result.getUser().getUsername()).isEqualTo("test");
 
         verify(searchItemRepo).save(searchItem);
+    }
+
+    @Test
+    public void testGetItemsGroupedByUser() throws SearchItemListNotFoundException {
+        UserProfile user1 = new UserProfile();
+        user1.setId(1L);
+        user1.setUsername("user1");
+
+        UserProfile user2 = new UserProfile();
+        user2.setId(2L);
+        user2.setUsername("user2");
+
+        SearchItem itemA = new SearchItem();
+        itemA.setId(1L);
+        itemA.setSearchTerm("item A");
+        itemA.setUser(user1);
+
+        SearchItem itemB = new SearchItem();
+        itemB.setId(2L);
+        itemB.setSearchTerm("item B");
+        itemB.setUser(user1);
+
+        SearchItem itemC = new SearchItem();
+        itemC.setId(3L);
+        itemC.setSearchTerm("item C");
+        itemC.setUser(user2);
+
+        List<SearchItem> items = Arrays.asList(itemA, itemB, itemC);
+
+        when(searchItemRepo.findAll()).thenReturn(items);
+
+        List<UserSearchItemsDTO> result = searchItemService.getItemsGroupedByUsers();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        UserSearchItemsDTO userItemsDTO1 = result.stream()
+                .filter(dto -> dto.getUser().getId().equals(1L))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(userItemsDTO1);
+        assertEquals(user1.getUsername(), userItemsDTO1.getUser().getUsername());
+        assertEquals(2, userItemsDTO1.getSearchItems().size());
+        assertEquals("item A", userItemsDTO1.getSearchItems().get(0).getSearchTerm());
+        assertEquals("item B", userItemsDTO1.getSearchItems().get(1).getSearchTerm());
+
+        UserSearchItemsDTO userItemsDTO2 = result.stream()
+                .filter(dto -> dto.getUser().getId().equals(2L))
+                .findFirst()
+                .orElse(null);
+        assertNotNull(userItemsDTO2);
+        assertEquals(user2.getUsername(), userItemsDTO2.getUser().getUsername());
+        assertEquals(1, userItemsDTO2.getSearchItems().size());
+        assertEquals("item C", userItemsDTO2.getSearchItems().get(0).getSearchTerm());
     }
 }

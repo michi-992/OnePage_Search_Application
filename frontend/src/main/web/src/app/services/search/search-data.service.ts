@@ -23,6 +23,11 @@ export class SearchDataService {
       return this.http.get(API_URL + 'all', httpOptions);
     }
 
+  getAllSearchItemsGroupedByUser(): Observable<any> {
+        return this.http.get(API_URL + 'groupedByUser', httpOptions);
+      }
+
+
   getSearchItemsByUser(): Observable<any> {
     return this.http.get(API_URL + 'user/' + this.storageService.getUser().username, httpOptions);
   }
