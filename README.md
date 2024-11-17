@@ -3,7 +3,7 @@
 This project is a Maven-based parent project consisting of two child modules: a backend and a frontend.
 The backend is a Spring Boot (version 3.3.4) application with Spring Security integration.
 The frontend is built with Angular (version 18).
-The application provides a search functionality where users can add search items to a database and have them displayed.
+The application provides a recipe search functionality that triggers an OpenSearch search and saves the search request in a PostgreSQL database.
 Additionally, the project includes a login, registration, homepage (search view), and admin view of all searches.
 
 ## Table of Contents
@@ -11,6 +11,7 @@ Additionally, the project includes a login, registration, homepage (search view)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [Database Configuration](#database-configuration)
+- [OpenSearch Configuration](#opensearch-configuration)
 - [Backend Setup](#backend-setup)
 - [Frontend Setup](#frontend-setup)
 - [Backend Functionality](#backend-functionality)
@@ -23,10 +24,9 @@ Additionally, the project includes a login, registration, homepage (search view)
 - Node: v20.18.0
 - npm: 10.8.2
 - Angular: 18.2.9
-- Spring Boot: 3.3.4
-- Optional:
-  - PostgreSQL: 17.0.1
-  - Docker: 27.2.0
+- Spring Boot: 3.3.4 
+- PostgreSQL: 17.0.1 
+- Docker: 27.2.0
 ## Getting Started
 
 To build and run the project:
@@ -92,6 +92,102 @@ The tables will be prepopulated:
 4. **search_items**  
    - two search items for the 2 users each
 
+## OpenSearch Configuration
+The project includes an OpenSearch configuration for indexing and searching data.
+
+### Setting up OpenSearch & Docker Compose
+1. Pull the OpenSearch Image:
+    ```bash
+   docker pull opensearchproject/opensearch:latest
+2. Pull the OpenSearch Dashboards Image
+    ```bash
+   docker pull opensearchproject/opensearch:latest
+   
+3. Make sure you have docker-compose installed (default for DockerDesktop).
+4. Move to `backend/src/main/resources` and create an `.env`:
+    ```bash
+   OPENSEARCH_INITIAL_ADMIN_PASSWORD=Iphos_Task_123!
+5. Make sure the passwords in `index_recipes.py`, `application.properties` and `docker-compose.yaml` match this password or use the .env var.
+6. Run the cluster in the `backend`directory:
+    ```bash
+   docker-compose up -d
+   ```
+   To stop the cluster run:
+    ```bash
+   docker-compose down
+   ```
+### Indexing Data with Python
+1. Dowload the `.zip` with the `.json` file for the recipes from https://www.kaggle.com/datasets/hugodarwood/epirecipes, extract it and move the json file to the `backend`directory.
+2. Make sure to have python with 'path' installed. In the `backend` directory run:
+    ```bash
+   python index_recipes.py
+   ```
+    This will create an index called 'recipes' and index the JSON data automatically.
+
+
+### Indexing Data with OpenSearch Dashboards
+1. Navigate to `http://localhost:5601` to the 'Dev Tools' of the OpenSearch Dashboard.
+2. Create an Index:
+    ```bash
+   PUT /recipes
+   {
+       "mappings": {
+           "properties": {
+               "title": { "type": "text" },
+               "desc": { "type": "text" },
+               "date": { "type": "date" },
+               "categories": { "type": "keyword" },
+               "ingredients": { "type": "keyword" },
+               "directions": { "type": "keyword" },
+               "calories": { "type": "float" },
+               "fat": { "type": "float" },
+               "protein": { "type": "float" },
+               "rating": { "type": "float" },
+               "sodium": { "type": "float" }
+           }
+       }
+   }
+3. Index recipes according to this structure:
+    ```bash
+   POST /recipes/_doc/123
+    {
+       "title": "A very nice Vegan dish",
+       "desc": "A beautiful description of the recipe",
+       "date": "2015-05-01T04:00:00.000Z",
+       "categories": [
+            "Vegan",
+            "Tree Nut Free",
+            "Soy Free",
+            "No Sugar Added"
+       ],
+       "ingredients": [
+            "list",
+            "of",
+            "ingredients"
+       ],
+       "directions": [
+            "list",
+            "of",
+            "steps",
+            "to prepare the dish"
+       ],
+       "calories": 32.0,
+       "fat": 1.0,
+       "protein": 1.0,
+       "rating": 5.0,
+       "sodium": 959.0
+    }
+3. Test the search with:
+    ```bash
+   GET /recipes/_search
+    {
+        "query": {
+            "match": {
+                "title": "A very nice Vegan dish"
+            }
+        }
+    }
+
 ## Backend Setup
 
 1. **Running the Backend**  
@@ -118,7 +214,10 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 ## Backend Functionality
 ### User Authentication and Authorization
 
-- API Endpoints: POST '/auth/login', POST '/auth/register', POST '/auth/signout'
+- API Endpoints:
+  - POST `/api/auth/login`
+  - POST `/api/auth/register`
+  - POST `/api/auth/signout`
 - Steps:
   - Users can log in, log out or register using the provided API endpoints.
   - Upon successful login, a JWT token is returned to the user.
@@ -126,11 +225,21 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 
 ### Search Items Management
 
-- API Endpoints: GET '/searchItems/user/{username}', POST '/searchItems/user/{username}/add'
+- API Endpoints:
+  - GET `/api/searchItems/user/{username}`
+  - POST `/api/searchItems/user/{username}/add`
 - Steps:
   - Users can fetch their search items using the GET '/searchItems' endpoint.
   - Users can add new search items using the POST '/searchItems' endpoint.
   - The search items are stored in the database and associated with the user.
+
+### Recipe Search by Title
+
+- API Endpoint:
+  - GET `/api/recipes/search-by-title?title={param}`
+- Steps:
+    - Users can search for recipes by title using the provided API endpoint.
+    - The API endpoint returns all recipes that contain the search term in their title.
 
 ### Role-Based Access Control
 
@@ -146,11 +255,13 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
   - Unit tests cover individual components and services. 
   - Integration tests ensure the proper functioning of the application as a whole and can be used for database population.
 
+
 ## Frontend Functionality
 
 ### Login View
 
-- API Endpoint: POST '/auth/signin'
+- API Endpoint:
+  - POST `/api/auth/signin`
 - Steps:
     - Navigate to the navigation view ('/login').
     - Enter username and password (example: "user1" & "password1").
@@ -160,7 +271,8 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 
 ### Registration View
 
-- API Endpoint: POST '/auth/signup'
+- API Endpoint:
+  - POST `/api/auth/signup`
 - Steps:
     - Navigate to the registration view ('/register').
     - Enter a new username, email and password.
@@ -171,20 +283,25 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 
 ### Main Page
 
-- API Endpoint: GET '/searchItems/user/{username}', POST '/searchItems/user/{username}/add'
+- API Endpoint:
+  - GET `/api/searchItems/user/{username}`
+  - POST `/api/searchItems/user/{username}/add`
+  - GET  `/api/recipes/search-by-title?title={param}`
 - Steps:
     - Navigate to the main page ('/').
-    - Enter a search term in the input field.
+    - Enter a search term (`{param}`) in the input field.
     - Click the "Search" button.
     - The search term will be added to the database and displayed in the user's search history.
-#
+    - All recipes with a title containing the search term get displayed.
+
 ### Admin View
 
-- API Endpoint: GET '/searchItems/all'
+- API Endpoint:
+  - GET `/api/searchItems/all`
 - Steps:
     - Navigate to the admin view ('/admin/search-history').
         - accessible only to users with the "ADMIN" role
-    - All search items from the database will be displayed in the admin view.
+    - All search items from the database grouped by users will be displayed in the admin view.
 
 
 
