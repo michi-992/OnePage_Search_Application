@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.topalovic.backend.model.Recipe;
 import org.topalovic.backend.service.RecipeService;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -22,6 +23,11 @@ public class RecipeController {
 
     @GetMapping(value = "/search-by-title", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Recipe> searchByTitle(@RequestParam(value = "title", required = false, defaultValue = "") String title) {
-        return recipeService.findByTitleContaining(title);
+        if(!title.isEmpty()) {
+            return recipeService.findByTitleContaining(title);
+        } else {
+            return Collections.emptyList();
+        }
+
     }
 }

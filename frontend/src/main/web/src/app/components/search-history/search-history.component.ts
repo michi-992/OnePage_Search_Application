@@ -13,21 +13,21 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class SearchHistoryComponent {
   searchItems$: Observable<any[]>;
-  private searchUpdateSub: Subscription | null = null;
+  private historyUpdateSub: Subscription | null = null;
 
   constructor(private searchDataService: SearchDataService) {
       this.searchItems$ = this.searchDataService.getSearchItemsByUser();
     }
 
   ngOnInit(): void {
-    this.searchUpdateSub = this.searchDataService.getSearchUpdatedListener().subscribe(() => {
+    this.historyUpdateSub = this.searchDataService.getHistoryUpdatedListener().subscribe(() => {
       this.searchItems$ = this.searchDataService.getSearchItemsByUser();
     });
   }
 
    ngOnDestroy(): void {
-     if (this.searchUpdateSub) {
-       this.searchUpdateSub.unsubscribe();
+     if (this.historyUpdateSub) {
+       this.historyUpdateSub.unsubscribe();
      }
    }
 }

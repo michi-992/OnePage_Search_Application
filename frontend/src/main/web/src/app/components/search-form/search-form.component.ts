@@ -19,14 +19,6 @@ export class SearchFormComponent {
   constructor(private searchDataService: SearchDataService, private storageService: StorageService) { }
 
   onSearch() {
-    const searchItem: SearchItem = { searchTerm: this.searchTerm, user: null };
-    this.searchDataService.addSearchItem(searchItem).subscribe(
-          response => {
-            console.log('POST request successful', response);
-          },
-          error => {
-            console.error('Error in POST request', error);
-          }
-        );
+    this.searchDataService.onSearch(this.searchTerm);
   }
 }

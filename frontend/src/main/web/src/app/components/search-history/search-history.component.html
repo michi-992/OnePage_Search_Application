@@ -1,6 +1,7 @@
-<ul class="mt-3">
-  <li *ngFor="let searchItem of searchItems$ | async">
+<h5>History</h5>
+<ul class="list-unstyled d-flex flex-column-reverse">
+  <li *ngFor="let searchItem of searchItems$ | async" class="mt-2">
     <strong>{{searchItem.searchTerm}}</strong>
-    {{ searchItem.searchedAt | date:'medium' }}
+    <span class="small text-muted d-block">{{ searchItem.searchedAt | date:'medium' }}</span>
   </li>
 </ul>
