@@ -67,6 +67,5 @@ frontend/scr/main/web/libpeerconnection.log
 frontend/scr/main/web/testem.log
 frontend/scr/main/web/typings
 
-backend/.env
 backend/full_format_recipes.json
 
