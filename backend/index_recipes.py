@@ -8,8 +8,6 @@ INDEX_NAME = 'recipes'
 # Initialize the OpenSearch client
 os_client = OpenSearch(
     hosts=[SERVICE_URI],
-    http_auth=('admin', 'Iphos_Task_123!'),  # Replace with your actual credentials
-    use_ssl=True,
     verify_certs=False,  # Set to False if you are using self-signed certificates
     ssl_show_warn=False
 )
