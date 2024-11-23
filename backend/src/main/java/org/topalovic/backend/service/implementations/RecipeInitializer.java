@@ -1,4 +1,4 @@
-package org.topalovic.backend.service;
+package org.topalovic.backend.service.implementations;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;

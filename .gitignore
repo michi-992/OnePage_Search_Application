@@ -68,4 +68,5 @@ frontend/scr/main/web/testem.log
 frontend/scr/main/web/typings
 
 backend/full_format_recipes.json
+backend/src/test/java/org/topalovic/backend/OpenSearchTests/full_format_recipes.json
 

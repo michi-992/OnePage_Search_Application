@@ -8,10 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +19,7 @@ import org.topalovic.backend.payload.request.SignupRequest;
 import org.topalovic.backend.payload.response.MessageResponse;
 import org.topalovic.backend.payload.response.UserInfoResponse;
 import org.topalovic.backend.service.AuthService;
-import org.topalovic.backend.service.UserDetailsServiceImpl;
+import org.topalovic.backend.service.implementations.UserDetailsServiceImpl;
 
 import java.util.List;
 

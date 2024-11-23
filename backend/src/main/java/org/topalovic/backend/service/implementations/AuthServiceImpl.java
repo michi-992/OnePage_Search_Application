@@ -1,4 +1,4 @@
-package org.topalovic.backend.service;
+package org.topalovic.backend.service.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseCookie;
@@ -14,6 +14,8 @@ import org.topalovic.backend.payload.response.UserInfoResponse;
 import org.topalovic.backend.repository.RoleRepository;
 import org.topalovic.backend.repository.UserRepository;
 import org.topalovic.backend.config.utility.JwtUtils;
+import org.topalovic.backend.service.AuthService;
+import org.topalovic.backend.model.UserDetailsCustom;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        UserDetailsCustom userDetails = (UserDetailsCustom) auth.getPrincipal();
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
@@ -53,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public ResponseCookie signInCookie(Authentication auth) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        UserDetailsCustom userDetails = (UserDetailsCustom) auth.getPrincipal();
         return jwtUtils.generateJwtCookie(userDetails);
     }
 

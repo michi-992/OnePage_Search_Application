@@ -1,14 +1,15 @@
-package org.topalovic.backend.service;
+package org.topalovic.backend.service.implementations;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.topalovic.backend.model.Recipe;
 import org.topalovic.backend.repository.RecipeRepository;
+import org.topalovic.backend.service.RecipeService;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
-public class RecipeServiceImpl implements RecipeService{
+public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepo;
 
@@ -19,5 +20,10 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public List<Recipe> findByTitleContaining(String title) {
         return recipeRepo.findByTitleContaining(title);
+    }
+
+    @Override
+    public void indexRecipes(List<Recipe> recipes) throws IOException {
+
     }
 }

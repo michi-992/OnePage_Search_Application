@@ -16,8 +16,8 @@ import java.util.List;
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(SearchItemListNotFoundException.class)
-    public ResponseEntity<List<SearchItem>> handleSearchItemsNotFound(SearchItemListNotFoundException exc, WebRequest req) {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleSearchItemsNotFound(SearchItemListNotFoundException exc, WebRequest req) {
+        return new ResponseEntity<>(exc.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)

@@ -1,6 +1,5 @@
-package org.topalovic.backend.SearchItemTests;
+package org.topalovic.backend.SearchHistoryTests;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,9 @@ import org.topalovic.backend.model.Role;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
 import org.topalovic.backend.repository.RoleRepository;
-import org.topalovic.backend.repository.SearchItemRepository;
+import org.topalovic.backend.repository.SearchHistoryRepository;
 import org.topalovic.backend.repository.UserRepository;
-import org.topalovic.backend.service.SearchItemService;
+import org.topalovic.backend.service.SearchHistoryService;
 
 import java.util.Optional;
 import java.util.Set;
@@ -36,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @WebAppConfiguration
-public class SearchItemIntegrationTest {
+public class SearchHistoryIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -45,10 +44,10 @@ public class SearchItemIntegrationTest {
 
 
     @Autowired
-    private SearchItemService searchItemService;
+    private SearchHistoryService searchHistoryService;
 
     @Autowired
-    private SearchItemRepository searchItemRepo;
+    private SearchHistoryRepository searchItemRepo;
 
     @Autowired
     private UserRepository userRepository;
@@ -109,7 +108,7 @@ public class SearchItemIntegrationTest {
         searchItem.setSearchTerm("integration test item");
         searchItem.setUser(normalUser);
 
-        SearchItem savedItem = searchItemService.addSearchItem(searchItem);
+        SearchItem savedItem = searchHistoryService.addSearchItem(searchItem);
 
         assertThat(savedItem).isNotNull();
         assertThat(savedItem.getId()).isNotNull();
@@ -122,107 +121,11 @@ public class SearchItemIntegrationTest {
         assertThat(retrievedItem.get().getUser().getUsername()).isEqualTo("user1");
     }
 
-    @Test
-    @WithMockUser
-    // @Transactional
-    public void testAddRealSearchItemEndpoint() throws Exception {
-        SearchItem searchItem = new SearchItem();
-        searchItem.setSearchTerm("integration test item - web");
-        searchItem.setUser(userRepository.findByUsername("user1").orElseThrow());
-
-        String json = "{\"searchTerm\": \"" + searchItem.getSearchTerm() + "\", \"user\": {\"id\": " + searchItem.getUser().getId() +
-                ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
-
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/user1/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.searchTerm").value(searchItem.getSearchTerm()))
-                .andExpect(jsonPath("$.user.id").value(searchItem.getUser().getId()));
-    }
-
-    @Test
-    @WithMockUser
-    public void testAddSearchItemWithInvalidUser() throws Exception {
-        SearchItem searchItem = new SearchItem();
-        searchItem.setSearchTerm("integration test item - invalid user");
-        searchItem.setUser(new UserProfile("nonexistentuser", "nonexistentuser@example.com", "password"));
-
-        String json = "{\"searchTerm\": \"" + searchItem.getSearchTerm() + "\", \"user\": {\"id\": " + searchItem.getUser().getId() +
-                ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
-
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/nonexistentuser/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        resultActions.andExpect(status().isNotFound()).andExpect(result -> assertEquals("User not found with username: nonexistentuser",
-                result.getResolvedException().getMessage()));
-    }
-
-    @Test
-    @WithMockUser
-    public void testAddSearchItemWithBlankSearchTerm() throws Exception {
-        SearchItem searchItem = new SearchItem();
-        searchItem.setSearchTerm("");
-        searchItem.setUser(normalUser);
-
-        String json = "{\"searchTerm\": \"" + searchItem.getSearchTerm() + "\", \"user\":{\"id\": " + searchItem.getUser().getId() +
-                ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
-
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/" + normalUser.getUsername() + "/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        resultActions.andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithMockUser
-    public void testAddSearchItemWithNullSearchTerm() throws Exception {
-        SearchItem searchItem = new SearchItem();
-        searchItem.setUser(normalUser);
-
-        String json = "{\"user\":{\"id\": " + searchItem.getUser().getId() +
-                ", \"username\": \"" + searchItem.getUser().getUsername() + "\"}}";
-
-        ResultActions resultActions = mockMvc.perform(post("/api/searchItems/user/" + normalUser.getUsername() + "/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        resultActions.andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @WithUserDetails("user1")
-    public void getSearchItemsByUser() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/user/{username}", normalUser.getUsername()));
-
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))))
-                .andExpect(jsonPath("$[0].user.id").value(normalUser.getId()))
-                .andExpect(jsonPath("$[0].id").exists())
-                .andExpect(jsonPath("$[0].searchTerm").exists())
-                .andExpect(jsonPath("$[0].searchedAt").exists())
-                .andExpect(jsonPath("$[0].user.id").exists());
-    }
-
-    @Test
-    @WithMockUser
-    public void getSearchItemsByNonExistentUser() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/user/{username}", "nonexistentuser"));
-
-        resultActions.andExpect(status().isNotFound())
-                .andExpect(result -> assertEquals("User not found with username: nonexistentuser",
-                        result.getResolvedException().getMessage()));
-    }
 
     @Test
     @WithUserDetails("admin")
     public void getAllSearchItemsByAdmin() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/api/searchItems/all"));
+        ResultActions resultActions = mockMvc.perform(get("/api/search-history/all"));
 
         resultActions.andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

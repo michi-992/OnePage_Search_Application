@@ -9,7 +9,7 @@ import org.topalovic.backend.model.Role;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
 import org.topalovic.backend.repository.RoleRepository;
-import org.topalovic.backend.repository.SearchItemRepository;
+import org.topalovic.backend.repository.SearchHistoryRepository;
 import org.topalovic.backend.repository.UserRepository;
 
 import java.util.Set;
@@ -18,7 +18,7 @@ import java.util.Set;
 public class DataInitConfig {
 
     @Bean
-    CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, SearchItemRepository searchItemRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, SearchHistoryRepository searchHistoryRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             if (roleRepository.findByName(ERole.ROLE_USER).isEmpty()) {
                 roleRepository.save(new Role(ERole.ROLE_USER));
@@ -52,18 +52,18 @@ public class DataInitConfig {
             }
 
             // Create two SearchItems for each user
-            if (searchItemRepository.findByUser(user1).isEmpty()) {
+            if (searchHistoryRepository.findByUser(user1).isEmpty()) {
                 SearchItem user1Item1 = new SearchItem("Search term 1 for user1", user1);
                 SearchItem user1Item2 = new SearchItem("Search term 2 for user1", user1);
-                searchItemRepository.save(user1Item1);
-                searchItemRepository.save(user1Item2);
+                searchHistoryRepository.save(user1Item1);
+                searchHistoryRepository.save(user1Item2);
             }
 
-            if (searchItemRepository.findByUser(admin).isEmpty()) {
+            if (searchHistoryRepository.findByUser(admin).isEmpty()) {
                 SearchItem adminItem1 = new SearchItem("Search term 1 for admin", admin);
                 SearchItem adminItem2 = new SearchItem("Search term 2 for admin", admin);
-                searchItemRepository.save(adminItem1);
-                searchItemRepository.save(adminItem2);
+                searchHistoryRepository.save(adminItem1);
+                searchHistoryRepository.save(adminItem2);
             }
         };
     }

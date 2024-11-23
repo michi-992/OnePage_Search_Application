@@ -1,20 +1,18 @@
-package org.topalovic.backend.SearchItemTests;
+package org.topalovic.backend.SearchHistoryTests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.topalovic.backend.exceptions.SearchItemListNotFoundException;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
-import org.topalovic.backend.model.UserSearchItemsDTO;
-import org.topalovic.backend.repository.SearchItemRepository;
+import org.topalovic.backend.payload.UserSearchItemsDTO;
+import org.topalovic.backend.repository.SearchHistoryRepository;
 import org.topalovic.backend.repository.UserRepository;
-import org.topalovic.backend.service.SearchItemServiceImpl;
-import org.topalovic.backend.service.UserDetailsServiceImpl;
+import org.topalovic.backend.service.implementations.SearchHistoryServiceImpl;
 
 import java.util.*;
 
@@ -26,15 +24,15 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class SearchItemServiceTest {
+public class SearchHistoryServiceTest {
     @Mock
-    SearchItemRepository searchItemRepo;
+    SearchHistoryRepository searchItemRepo;
 
     @Mock
     UserRepository userRepo;
 
     @InjectMocks
-    SearchItemServiceImpl searchItemService;
+    SearchHistoryServiceImpl searchItemService;
 
 
 

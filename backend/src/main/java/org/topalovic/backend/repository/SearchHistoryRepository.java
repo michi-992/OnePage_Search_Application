@@ -8,6 +8,6 @@ import org.topalovic.backend.model.UserProfile;
 import java.util.List;
 
 @Repository
-public interface SearchItemRepository extends JpaRepository<SearchItem, Long> {
+public interface SearchHistoryRepository extends JpaRepository<SearchItem, Long> {
     List<SearchItem> findByUser(UserProfile user);
 }

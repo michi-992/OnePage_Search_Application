@@ -1,4 +1,4 @@
-package org.topalovic.backend.service;
+package org.topalovic.backend.service.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -7,45 +7,47 @@ import org.topalovic.backend.exceptions.BadRequestException;
 import org.topalovic.backend.exceptions.SearchItemListNotFoundException;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
-import org.topalovic.backend.model.UserSearchItemsDTO;
-import org.topalovic.backend.repository.SearchItemRepository;
+import org.topalovic.backend.payload.UserSearchItemsDTO;
+import org.topalovic.backend.repository.SearchHistoryRepository;
 import org.topalovic.backend.repository.UserRepository;
+import org.topalovic.backend.service.SearchHistoryService;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class SearchItemServiceImpl implements SearchItemService {
+public class SearchHistoryServiceImpl implements SearchHistoryService {
     @Autowired
-    private SearchItemRepository searchItemRepo;
+    private SearchHistoryRepository searchItemRepo;
 
     @Autowired
     private UserRepository userRepo;
 
-    public SearchItemServiceImpl() { }
+    public SearchHistoryServiceImpl() { }
 
-    public SearchItemServiceImpl(SearchItemRepository searchItemRepo) {
+    public SearchHistoryServiceImpl(SearchHistoryRepository searchItemRepo) {
         this.searchItemRepo = searchItemRepo;
     }
 
     @Override
-    public List<SearchItem> findAll() throws SearchItemListNotFoundException {
+    public List<SearchItem> findAll() {
         List<SearchItem> searchItems = searchItemRepo.findAll();
+
         if (searchItems.isEmpty()) {
-            throw new SearchItemListNotFoundException();
+            throw new SearchItemListNotFoundException("No history was found.");
         }
+
         return searchItems;
     }
 
     @Override
-    public List<UserSearchItemsDTO> getItemsGroupedByUsers() throws SearchItemListNotFoundException {
+    public List<UserSearchItemsDTO> getItemsGroupedByUsers() {
         List<SearchItem> searchItems = searchItemRepo.findAll();
+
         if (searchItems.isEmpty()) {
-            throw new SearchItemListNotFoundException();
+            throw new SearchItemListNotFoundException("No history was found.");
         }
+
         return searchItems.stream()
                 .collect(Collectors.groupingBy(SearchItem::getUser))
                 .entrySet()

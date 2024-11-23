@@ -1,4 +1,4 @@
-package org.topalovic.backend.service;
+package org.topalovic.backend.service.implementations;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.topalovic.backend.model.UserProfile;
 import org.topalovic.backend.repository.UserRepository;
+import org.topalovic.backend.model.UserDetailsCustom;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -20,6 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserProfile user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
-        return UserDetailsImpl.build(user);
+        return UserDetailsCustom.build(user);
     }
 }

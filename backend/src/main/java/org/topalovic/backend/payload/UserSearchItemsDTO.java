@@ -1,4 +1,7 @@
-package org.topalovic.backend.model;
+package org.topalovic.backend.payload;
+
+import org.topalovic.backend.model.SearchItem;
+import org.topalovic.backend.model.UserProfile;
 
 import java.util.List;
 
