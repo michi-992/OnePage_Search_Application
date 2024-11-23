@@ -35,7 +35,9 @@ public class OpenSearchConfig {
             }
 
             @Override
-            public void customize(RestClientBuilder builder) {}
+            public void customize(RestClientBuilder builder) {
+                // No additional customizations needed
+            }
         };
     }
 

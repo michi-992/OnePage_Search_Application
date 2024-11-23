@@ -21,9 +21,4 @@ public class RecipeServiceImpl implements RecipeService {
     public List<Recipe> findByTitleContaining(String title) {
         return recipeRepo.findByTitleContaining(title);
     }
-
-    @Override
-    public void indexRecipes(List<Recipe> recipes) throws IOException {
-
-    }
 }

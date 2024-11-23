@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface RecipeService {
     public List<Recipe> findByTitleContaining(String title);
-    public void indexRecipes(List<Recipe> recipes) throws IOException;
 }

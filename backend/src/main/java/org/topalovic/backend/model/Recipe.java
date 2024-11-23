@@ -1,5 +1,6 @@
 package org.topalovic.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -16,7 +17,8 @@ public class Recipe {
     @Field(type = FieldType.Text, name = "title")
     private String title;
 
-    @Field(type = FieldType.Text, name = "desc")
+    @Field(type = FieldType.Text, name = "description")
+    @JsonProperty("desc")
     private String description;
 
     @Field(type = FieldType.Date, name = "date")
