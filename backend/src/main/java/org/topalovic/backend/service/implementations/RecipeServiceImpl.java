@@ -5,6 +5,7 @@ import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.opensearch._types.FieldValue;
 import org.opensearch.client.opensearch._types.SortOrder;
 import org.opensearch.client.opensearch._types.query_dsl.MatchQuery;
+import org.opensearch.client.opensearch._types.query_dsl.Operator;
 import org.opensearch.client.opensearch._types.query_dsl.QueryBuilders;
 import org.opensearch.client.opensearch.core.SearchRequest;
 import org.opensearch.client.opensearch.core.SearchResponse;
@@ -70,12 +71,18 @@ public class RecipeServiceImpl implements RecipeService {
             }
 
             UserProfile user = userRepo.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + request.getUsername()));
-            request.getSearchItem().setUser(user);
-            searchHistoryRepo.save(request.getSearchItem());
             List<SearchItem> searchHistory = searchHistoryRepo.findByUser(user);
-            if (searchHistory.isEmpty()) {
-                throw new SearchItemListNotFoundException("No search history found for user: " + request.getUsername());
+
+            if(!request.getNextPageSearch()) {
+
+                request.getSearchItem().setUser(user);
+                searchHistoryRepo.save(request.getSearchItem());
+                searchHistory = searchHistoryRepo.findByUser(user);
+                if (searchHistory.isEmpty()) {
+                    throw new SearchItemListNotFoundException("No search history found for user: " + request.getUsername());
+                }
             }
+
 
             SearchRequest searchRequest = SearchRequest.of(req -> req
                     .index("recipes")
@@ -83,6 +90,7 @@ public class RecipeServiceImpl implements RecipeService {
                             .match(m -> m
                                     .field("title")
                                     .query(FieldValue.of(request.getSearchItem().getSearchTerm()))
+                                    .operator(Operator.And)
                                     .fuzziness("AUTO")
                             )
                     )

@@ -77,7 +77,6 @@ public class SearchRequestController {
     public ResponseEntity<SearchRequestResponse> searchRecipesByTitle(
             @RequestBody TitleSearchRequest request
     ) {
-        System.out.println("IN THE CONTROLLER");
         if (request.getSearchItem().getSearchTerm().isEmpty() || request.getUsername() == null || request.getUsername().isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }

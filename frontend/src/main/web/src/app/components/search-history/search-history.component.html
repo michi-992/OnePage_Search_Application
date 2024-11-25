@@ -1,7 +1,12 @@
 <h5>History</h5>
-<ul class="list-unstyled d-flex flex-column-reverse">
-  <li *ngFor="let searchItem of searchItems$ | async" class="mt-2">
-    <strong>{{searchItem.searchTerm}}</strong>
-    <span class="small text-muted d-block">{{ searchItem.searchedAt | date:'medium' }}</span>
-  </li>
-</ul>
+<div *ngIf="searchItems$ | async as searchItems; else loading">
+  <ul class="list-unstyled d-flex flex-column-reverse">
+    <li *ngFor="let item of searchItems" class="mt-2">
+      <strong>{{item.searchTerm}}</strong>
+      <span class="small text-muted d-block">{{ item.searchedAt | date:'medium' }}</span>
+    </li>
+  </ul>
+</div>
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

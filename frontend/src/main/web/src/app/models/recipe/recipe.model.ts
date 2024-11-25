@@ -2,7 +2,7 @@ export interface Recipe {
   id: string;
 
    title: string;
-   description: string;
+   desc: string;
    date: Date;
 
    categories: string[];

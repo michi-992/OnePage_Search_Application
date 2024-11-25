@@ -8,6 +8,7 @@ public class TitleSearchRequest {
     private String username;
     private int page = 1;
     private int size = 10;
+    private boolean nextPageSearch = false;
 
 
 
@@ -41,5 +42,13 @@ public class TitleSearchRequest {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public boolean getNextPageSearch() {
+        return nextPageSearch;
+    }
+
+    public void setNextPageSearch(boolean bool) {
+        this.nextPageSearch = bool;
     }
 }

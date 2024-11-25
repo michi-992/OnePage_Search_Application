@@ -12,22 +12,48 @@ import { Observable, Subscription } from 'rxjs';
   styleUrl: './search-history.component.css'
 })
 export class SearchHistoryComponent {
-  searchItems$: Observable<any[]>;
-  private historyUpdateSub: Subscription | null = null;
+  // searchItems$: Observable<SearchItem[]>;
+  // private historyUpdateSub: Subscription | null = null;
+
+  // constructor(private searchDataService: SearchDataService) {
+  //   this.searchItems$ = new Observable<SearchItem[]>()
+  //   }
+
+  // ngOnInit(): void {
+  //   this.historyUpdateSub = this.searchDataService.getSearchUpdatedListener().subscribe(() => {
+  //     this.loadSearchHistory();
+  //   });
+  //   this.loadSearchHistory();
+  // }
+
+  //  ngOnDestroy(): void {
+  //    if (this.historyUpdateSub) {
+  //      this.historyUpdateSub.unsubscribe();
+  //    }
+  //  }
+
+  //  private loadSearchHistory(): void {
+  //   this.searchDataService.searchRecipesByTitleContaining(
+  //     this.searchDataService.getSearchTerm(),
+  //     this.searchDataService.getUsername(),
+  //     this.searchDataService.getPage(),
+  //     this.searchDataService.getSize()
+  //   ).subscribe({
+  //     next: (response) => {
+  //       this.searchItems$ = new Observable<SearchItem[]>(observer => {
+  //         observer.next(response.searchHistory);
+  //         observer.complete();
+  //       });
+  //     },
+  //     error: (err) => console.error(err),
+  //   });
+  // }
+
+  searchItems$: Observable<SearchItem[]>;
 
   constructor(private searchDataService: SearchDataService) {
-      this.searchItems$ = this.searchDataService.getSearchItemsByUser();
-    }
-
-  ngOnInit(): void {
-    this.historyUpdateSub = this.searchDataService.getHistoryUpdatedListener().subscribe(() => {
-      this.searchItems$ = this.searchDataService.getSearchItemsByUser();
-    });
+    this.searchItems$ = this.searchDataService.getSearchHistory();
   }
 
-   ngOnDestroy(): void {
-     if (this.historyUpdateSub) {
-       this.historyUpdateSub.unsubscribe();
-     }
-   }
+  ngOnInit(): void {}
 }

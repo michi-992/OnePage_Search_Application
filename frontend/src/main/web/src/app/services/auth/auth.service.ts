@@ -29,7 +29,7 @@ export class AuthService {
       httpOptions
     ).pipe(
            tap(() =>
-           {console.log("after login " + true)
+           {
                   this.isLoggedIn.next(true)
              }
            )
@@ -50,7 +50,7 @@ export class AuthService {
 
   logout(): Observable<any> {
     return this.http.post(AUTH_API + 'signout', { }, httpOptions).pipe(
-      tap(() => {console.log("after login " + false)
+      tap(() => {
                              this.isLoggedIn.next(false)
                         })
       );
