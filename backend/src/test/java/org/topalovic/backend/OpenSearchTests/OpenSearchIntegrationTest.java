@@ -93,11 +93,6 @@ public class OpenSearchIntegrationTest {
         }
     }
 
-    @Test
-    public  void testRecipeRepository() {
-        assertThat(repository.findAll()).isEmpty();
-    }
-
 
     @Test
     void bulkIndexRecipesFromJson() throws IOException {

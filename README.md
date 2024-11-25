@@ -78,7 +78,7 @@ This will compile and package both backend and frontend modules.
 If using a different database (e.g., MySQL), update your `pom.xml` accordingly and adjust the connection properties in `application.properties`.
 
 ### Prepopulated Database
-The database after starting the application will include 4 tables: users, user_roles, roles, and searchItems.
+The database after starting the application will include 4 tables: users, user_roles, roles, and search-history.
 The tables will be prepopulated:
 1. **roles**  
    - user
@@ -114,16 +114,28 @@ The project includes an OpenSearch configuration for indexing and searching data
    ```
    To stop the cluster run:
     ```bash
+   docker-compose stop
+   ```
+   To remove the cluster run:
+    ```bash
    docker-compose down
    ```
 ### Indexing Data with Python
-1. Dowload the `.zip` with the `.json` file for the recipes from https://www.kaggle.com/datasets/hugodarwood/epirecipes, extract it and move the json file to the `backend`directory.
-2. Make sure to have python with 'path' installed. In the `backend` directory run:
+1. Dowload the `.zip` containing the `.json` file for the recipes from https://www.kaggle.com/datasets/hugodarwood/epirecipes, extract it and move the `json` file to the `backend` directory.
+2. Ensure you have Python installed and added to your system's PATH.
+3. In the `backend` directory, install the necessary dependencies by running:
+    ```bash
+   pip install pip install opensearch-py
+3. Run the following command to index the data:
     ```bash
    python index_recipes.py
    ```
-    This will create an index called 'recipes' and index the JSON data automatically.
+    This script will create an index called 'recipes' and index the JSON data automatically.
 
+### Indexing Data with Integration Test
+1. Dowload the `.zip` containing the `.json` file for the recipes from https://www.kaggle.com/datasets/hugodarwood/epirecipes, extract it and move the `.json` file to the `backend/src/test/resources` directory.
+2. Open the file `OpenSearchIntegrationTest` in directory `backend/src/test/java/org/topalovic/backend/OpenSearchTests`.
+3. Run the `bulkIndexRecipesFromJson()` Test or the whole class to index the data from the .json file.
 
 ### Indexing Data with OpenSearch Dashboards
 1. Navigate to `http://localhost:5601` to the 'Dev Tools' of the OpenSearch Dashboard.
@@ -223,23 +235,35 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
   - Upon successful login, a JWT token is returned to the user.
   - The user can use the JWT token for subsequent authenticated requests.
 
-### Search Items Management
+### Search History Admin Management
 
 - API Endpoints:
-  - GET `/api/searchItems/user/{username}`
-  - POST `/api/searchItems/user/{username}/add`
+  - GET `/api/search-history/all`
+  - POST `/api/search-history/groupedByUser`
 - Steps:
-  - Users can fetch their search items using the GET '/searchItems' endpoint.
-  - Users can add new search items using the POST '/searchItems' endpoint.
-  - The search items are stored in the database and associated with the user.
+  - Users with the role 'ADMIN' can access these endpoints to retrieve the entire search history and grouped by user.
 
-### Recipe Search by Title
+### Recipe Search by Title & Search Items Management
 
 - API Endpoint:
-  - GET `/api/recipes/search-by-title?title={param}`
+  - POST `/api/search-request/search-by-text`
 - Steps:
     - Users can search for recipes by title using the provided API endpoint.
-    - The API endpoint returns all recipes that contain the search term in their title.
+    - The query is done with AUTO-`fuzziness` and uses the `and`-operator.
+    - The search term(s) get(s) saved into the search history repository.
+    - The API endpoint returns all recipes that contain or are similar to the search term in their title.
+
+- API Endpoint:
+  - POST `api/search-request/search-by-calories`
+- Steps:
+  - Users can search for recipes by range of calories as well as sort them in ascending or descending order.
+  - The API endpoint returns all recipes that fall into the specified calories-range.
+
+- API Endpoint:
+    - POST `api/search-request/search-by-sodium`
+- Steps:
+    - Users can search for recipes by range of sodium as well as sort them in ascending or descending order.
+    - The API endpoint returns all recipes that fall into the specified sodium-range.
 
 ### Role-Based Access Control
 
@@ -253,7 +277,7 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 - Backend Tests:
   - The backend application provides unit and integration tests. 
   - Unit tests cover individual components and services. 
-  - Integration tests ensure the proper functioning of the application as a whole and can be used for database population.
+  - Integration tests ensure the proper functioning of the application as a whole and can be used for database population as well as opensearch indexing.
 
 
 ## Frontend Functionality
@@ -284,12 +308,10 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 ### Main Page
 
 - API Endpoint:
-  - GET `/api/searchItems/user/{username}`
-  - POST `/api/searchItems/user/{username}/add`
-  - GET  `/api/recipes/search-by-title?title={param}`
+  - POST `/api/search-request/search-by-text`
 - Steps:
     - Navigate to the main page ('/').
-    - Enter a search term (`{param}`) in the input field.
+    - Enter one or more search terms in the input field.
     - Click the "Search" button.
     - The search term will be added to the database and displayed in the user's search history.
     - All recipes with a title containing the search term get displayed.
@@ -297,7 +319,7 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 ### Admin View
 
 - API Endpoint:
-  - GET `/api/searchItems/all`
+  - GET `/api/search-history/groupedByUser`
 - Steps:
     - Navigate to the admin view ('/admin/search-history').
         - accessible only to users with the "ADMIN" role
