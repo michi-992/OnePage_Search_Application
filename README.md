@@ -53,7 +53,7 @@ This will compile and package both backend and frontend modules.
   An Angular application (18) that provides the user interface for the one-page application.
 
 ## Database Configuration
-### Setting up PostgreSQL with Docker
+### Setting up PostgreSQL with Docker without using Docker-Compose
 1. Install Docker: Download and install Docker from https://www.docker.com/.
 2. Pull the PostgrSQL Image:
     ```bash
@@ -73,6 +73,9 @@ This will compile and package both backend and frontend modules.
     spring.datasource.password=mysecretpassword
     spring.jpa.hibernate.ddl-auto=update
     spring.jpa.show-sql=true
+   
+### Setting up PostgreSQL with Docker with using Docker-Compose
+When running `docker-compose up -d` in the `backend` directory, the postgres service defined in `docker-compose.yaml` will start as well. More information about the docker-compose configuration are provided at [OpenSearch Configuration](#opensearch-configuration).
 
 ### Switching to different Database
 If using a different database (e.g., MySQL), update your `pom.xml` accordingly and adjust the connection properties in `application.properties`.
@@ -107,7 +110,10 @@ The project includes an OpenSearch configuration for indexing and searching data
 4. Move to `backend/src/main/resources` and create an `.env`:
     ```bash
    OPENSEARCH_INITIAL_ADMIN_PASSWORD=Iphos_Task_123!
-5. Make sure the passwords in `index_recipes.py`, `application.properties` and `docker-compose.yaml` match this password or use the .env var.
+   POSTGRES_USER=admin
+    POSTGRES_PASSWORD=password
+    POSTGRES_DB=firstDatabase
+5. Make sure the values in `index_recipes.py`, `application.properties` and `docker-compose.yaml` match this password or use the .env var.
 6. Run the cluster in the `backend`directory:
     ```bash
    docker-compose up -d
