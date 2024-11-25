@@ -1,5 +1,7 @@
 package org.topalovic.backend.payload.response;
 
+import org.opensearch.client.opensearch.core.SearchResponse;
+import org.opensearch.client.opensearch.core.search.HitsMetadata;
 import org.topalovic.backend.model.Recipe;
 import org.topalovic.backend.model.SearchItem;
 
@@ -7,11 +9,11 @@ import java.util.List;
 
 public class SearchRequestResponse {
     private List<SearchItem> searchHistory;
-    private List<Recipe> recipes;
+    private HitsMetaDataRecipeResponse searchResponse;
 
-    public SearchRequestResponse(List<SearchItem> searchHistory, List<Recipe> recipes) {
+    public SearchRequestResponse(List<SearchItem> searchHistory, HitsMetaDataRecipeResponse searchResponse) {
         this.searchHistory = searchHistory;
-        this.recipes = recipes;
+        this.searchResponse = searchResponse;
     }
 
     public List<SearchItem> getSearchHistory() {
@@ -22,11 +24,11 @@ public class SearchRequestResponse {
         this.searchHistory = searchHistory;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public HitsMetaDataRecipeResponse getSearchResponse() {
+        return searchResponse;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
+    public void setSearchResponse(HitsMetaDataRecipeResponse searchResponse) {
+        this.searchResponse = searchResponse;
     }
 }

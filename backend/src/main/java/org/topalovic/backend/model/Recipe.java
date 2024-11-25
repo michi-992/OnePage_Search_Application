@@ -1,5 +1,6 @@
 package org.topalovic.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Document(indexName = "recipes")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
     @Id
     private String id;
@@ -17,9 +19,8 @@ public class Recipe {
     @Field(type = FieldType.Text, name = "title")
     private String title;
 
-    @Field(type = FieldType.Text, name = "description")
-    @JsonProperty("desc")
-    private String description;
+    @Field(type = FieldType.Text, name = "desc")
+    private String desc;
 
     @Field(type = FieldType.Date, name = "date")
     private Date date;
@@ -50,10 +51,10 @@ public class Recipe {
 
     public Recipe() {}
 
-    public Recipe(String id, String title, String description, Date date, List<String> categories, List<String> ingredients, List<String> directions, Float calories, Float fat, Float protein, Float rating, Float sodium) {
+    public Recipe(String id, String title, String desc, Date date, List<String> categories, List<String> ingredients, List<String> directions, Float calories, Float fat, Float protein, Float rating, Float sodium) {
         this.id = id;
         this.title = title;
-        this.description = description;
+        this.desc = desc;
         this.date = date;
         this.categories = categories;
         this.ingredients = ingredients;
@@ -81,12 +82,12 @@ public class Recipe {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public Date getDate() {
