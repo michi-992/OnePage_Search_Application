@@ -5,7 +5,7 @@
   <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
     <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" class="form-control" name="username" [(ngModel)]="registerData.username" required minlength="3"
+      <input id="username" type="text" class="form-control" name="username" [(ngModel)]="registerData.username" required minlength="3"
              maxlength="20" #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.errors }"/>
 
       @if (username.errors && f.submitted) {
@@ -25,7 +25,7 @@
 
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="email" class="form-control" name="email" [(ngModel)]="registerData.email" required
+      <input id="email" type="email" class="form-control" name="email" [(ngModel)]="registerData.email" required
              email #email="ngModel" [ngClass]="{ 'is-invalid': f.submitted && email.errors }"/>
 
           @if (email.errors && f.submitted) {
@@ -42,7 +42,7 @@
 
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" class="form-control" name="password" [(ngModel)]="registerData.password" required
+      <input id="password" type="password" class="form-control" name="password" [(ngModel)]="registerData.password" required
             minlength="6" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.errors }"/>
 
           @if (password.errors && f.submitted) {

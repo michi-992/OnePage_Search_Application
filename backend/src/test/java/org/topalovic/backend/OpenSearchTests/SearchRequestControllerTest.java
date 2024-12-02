@@ -18,13 +18,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.topalovic.backend.controller.SearchHistoryController;
 import org.topalovic.backend.controller.SearchRequestController;
+import org.topalovic.backend.model.AggregationResults;
 import org.topalovic.backend.model.Recipe;
 import org.topalovic.backend.model.SearchItem;
 import org.topalovic.backend.model.UserProfile;
 import org.topalovic.backend.payload.UserSearchItemsDTO;
 import org.topalovic.backend.payload.request.CalorieSearchRequest;
+import org.topalovic.backend.payload.request.FullSearchRequest;
 import org.topalovic.backend.payload.request.SodiumSearchRequest;
-import org.topalovic.backend.payload.request.TitleSearchRequest;
 import org.topalovic.backend.payload.response.HitsMetaDataRecipeResponse;
 import org.topalovic.backend.payload.response.SearchRequestResponse;
 import org.topalovic.backend.service.RecipeService;
@@ -50,6 +51,9 @@ public class SearchRequestControllerTest {
     @MockBean
     private SearchHistoryService searchHistoryService;
 
+    @MockBean
+    private AggregationResults aggregationResults;
+
     @Autowired
     MockMvc mockMvc;
 
@@ -58,14 +62,14 @@ public class SearchRequestControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     public void testSearchRecipesByTitle_Success() throws Exception {
-        TitleSearchRequest request = new TitleSearchRequest();
+        FullSearchRequest request = new FullSearchRequest();
         request.setUsername("testUser");
         request.setSearchItem(new SearchItem());
         request.getSearchItem().setSearchTerm("pizza");
 
         SearchRequestResponse response = new SearchRequestResponse(null, null);
 
-        when(recipeService.searchByTitle(any(TitleSearchRequest.class))).thenReturn(response);
+        when(recipeService.searchByText(any(FullSearchRequest.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/search-request/search-by-text")
                         .with(csrf())
@@ -77,7 +81,7 @@ public class SearchRequestControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     public void testSearchRecipesByTitle_BadRequest() throws Exception {
-        TitleSearchRequest request = new TitleSearchRequest();
+        FullSearchRequest request = new FullSearchRequest();
         request.setUsername(null);
         request.setSearchItem(new SearchItem());
         request.getSearchItem().setSearchTerm("");

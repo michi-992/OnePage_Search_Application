@@ -1,55 +1,6 @@
-<!-- <div class="container mt-4">
-  <h5 class="mb-4 border-bottom">Recipes</h5>
-  <ul class="list-group">
-    <li class="list-group-item" *ngFor="let recipe of recipes$ | async">
-      <div>
-        <strong>{{ recipe.title }}</strong>
-      </div>
-      <div class="d-flex align-items-center small text-muted">
-        <div *ngIf="recipe.protein !== null && recipe.protein !== undefined">
-          <span>Protein: </span><span>{{ recipe.protein }}g</span>
-          <span class="mx-2"> | </span>
-        </div>
-        <div *ngIf="recipe.fat !== null && recipe.fat !== undefined">
-          <span>Fat: </span><span>{{ recipe.fat }}g</span>
-          <span class="mx-2"> | </span>
-        </div>
-        <div *ngIf="recipe.calories !== null && recipe.calories !== undefined">
-          <span>Calories: </span><span>{{ recipe.calories }}cal</span>
-          <span class="mx-2"> | </span>
-        </div>
-        <div *ngIf="recipe.sodium !== null && recipe.sodium !== undefined">
-          <span>Sodium: </span><span>{{ recipe.sodium }}mg</span>
-        </div>
-        
-      </div>
-      
-    </li>
-  </ul>
-</div>
 
-<div class="mt-4">
-  <button 
-    class="btn btn-sm btn-light" 
-    [disabled]="currentPage === 1" 
-    (click)="onPageChange(currentPage - 1)">Previous</button>
-  
-  <button 
-    *ngFor="let page of totalPagesArray" 
-    class="btn btn-sm"
-    [class.btn-primary]="currentPage === page" 
-    [class.btn-light]="currentPage !== page" 
-    (click)="onPageChange(page)">
-    {{ page }}
-  </button>
-  
-  <button 
-    class="btn btn-sm btn-light" 
-    [disabled]="currentPage === totalPages" 
-    (click)="onPageChange(currentPage + 1)">Next</button>
-</div> -->
 <div class="container mt-4">
-  <h5 class="mb-4 border-bottom">Recipes</h5>
+  <h4 class="mb-4 border-bottom">Recipes</h4>
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let recipe of recipes$ | async">
       <div>

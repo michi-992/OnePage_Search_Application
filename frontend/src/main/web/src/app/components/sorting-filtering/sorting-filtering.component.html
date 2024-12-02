@@ -1,0 +1,106 @@
+
+<div class="container w-100">
+ 
+    <h4>Sorting</h4>
+    <div class="mb-3">
+      <label for="sizeSelect" class="form-label">Results Per Page:</label>
+    <select
+      id="sizeSelect"
+      class="form-select"
+      [(ngModel)]="size"
+      (change)="onSizeChange(size)"
+    >
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="25">25</option>
+      <option [value]="50">50</option>
+    </select>
+    </div>
+    <div class="mb-5">
+      <label for="sortSelect" class="form-label">Sort By:</label>
+      <select id="sortSelect" class="form-select" (change)="onSortChange($event)">
+        <option value="default">Default</option>
+        <option value="calories asc">Calories Ascending</option>
+        <option value="calories desc">Calories Descending</option>
+        <option value="sodium asc">Sodium Ascending</option>
+        <option value="sodium desc">Sodium Descending</option>
+        <option value="fat asc">Fat Ascending</option>
+        <option value="fat desc">Fat Descending</option>
+        <option value="protein asc">Protein Ascending</option>
+        <option value="protein desc">Protein Descending</option>
+        <option value="rating asc">Rating Ascending</option>
+        <option value="rating desc">Rating Descending</option>
+      </select>
+    </div>
+  
+    <h4>Filter</h4>
+    <div *ngFor="let filterKey of objectKeys(filters)">
+      <h5 class="mt-3 p-1 border-top">{{ filterKey | titlecase }}</h5>
+  
+      <div class="form-check">
+        <input
+          type="checkbox"
+          class="form-check-input"
+          [(ngModel)]="filters[filterKey].isApplied"
+          (change)="toggleFilter(filterKey)"
+        />
+        <label class="form-check-label">Apply {{ filterKey | titlecase }} Filter</label>
+      </div>
+  
+      <div *ngIf="filters[filterKey].isApplied" class="slider-labels mt-3">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="{{ filterKey }}MinValue" class="form-label">From</label>
+            <input
+              id="{{ filterKey }}MinValue"
+              type="number"
+              [(ngModel)]="filters[filterKey].minValue"
+              (input)="updateSlider(filterKey)"
+              (keydown)="onKeyDown($event, filterKey, true)"
+              [min]="0"
+              [max]="filters[filterKey].maxValue"
+              class="form-control form-control-lg"
+              placeholder="From"
+              (blur)="validateMinValue(filterKey)"
+            />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="{{ filterKey }}MaxValue" class="form-label">To</label>
+            <input
+              id="{{ filterKey }}MaxValue"
+              type="number"
+              [(ngModel)]="filters[filterKey].maxValue"
+              (input)="updateSlider(filterKey)"
+              (keydown)="onKeyDown($event, filterKey, false)"
+              [min]="filters[filterKey].minValue"
+              [max]="filters[filterKey].maxValue"
+              class="form-control form-control-lg"
+              placeholder="To"
+              (blur)="validateMaxValue(filterKey)"
+            />
+          </div>
+        </div>
+      </div>
+  
+      <div *ngIf="filters[filterKey].isApplied" class="slider-container slider-container-{{ filterKey }} mt-2 position-relative">
+        <div
+          class="range-bar"
+          [ngStyle]="{
+            'left.%': filters[filterKey].minPercent,
+            'width.%': filters[filterKey].maxPercent - filters[filterKey].minPercent
+          }"
+        ></div>
+        <div
+          class="slider min-handle"
+          [ngStyle]="{ 'left.%': filters[filterKey].minPercent }"
+          (mousedown)="startDraggingMin($event, filterKey)"
+        ></div>
+        <div
+          class="slider max-handle"
+          [ngStyle]="{ 'left.%': filters[filterKey].maxPercent }"
+          (mousedown)="startDraggingMax($event, filterKey)"
+        ></div>
+      </div>
+    </div>
+  </div>
+  

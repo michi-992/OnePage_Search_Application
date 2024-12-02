@@ -1,8 +1,8 @@
-<h5>History</h5>
+<h4>History</h4>
 <div *ngIf="searchItems$ | async as searchItems; else loading">
   <ul class="list-unstyled d-flex flex-column-reverse">
     <li *ngFor="let item of searchItems" class="mt-2">
-      <strong>{{item.searchTerm}}</strong>
+      <strong class="text-primary cursor-pointer" (click)="redoSearch(item.searchTerm)">{{item.searchTerm}}</strong>
       <span class="small text-muted d-block">{{ item.searchedAt | date:'medium' }}</span>
     </li>
   </ul>

@@ -12,42 +12,6 @@ import { Observable, Subject, Subscription } from 'rxjs';
   styleUrl: './recipe-list.component.css'
 })
 export class RecipeListComponent {
-  // recipes$: Observable<Recipe[]>;
-  // private searchUpdateSub: Subscription | null = null;
-
-  // constructor(private searchDataService: SearchDataService) {
-  //   this.recipes$ = new Observable<Recipe[]>();
-  // }
-
-  // ngOnInit(): void {
-  //   this.searchUpdateSub = this.searchDataService.getSearchUpdatedListener().subscribe(() => {
-  //     this.loadRecipes();
-  //   });
-  //   this.loadRecipes();
-  // }
-
-  // ngOnDestroy(): void {
-  //   if (this.searchUpdateSub) {
-  //     this.searchUpdateSub.unsubscribe();
-  //   }
-  // }
-
-  // private loadRecipes(): void {
-  //   this.searchDataService.searchRecipesByTitleContaining(
-  //     this.searchDataService.getSearchTerm(),
-  //     this.searchDataService.getUsername(),
-  //     this.searchDataService.getPage(),
-  //     this.searchDataService.getSize()
-  //   ).subscribe({
-  //     next: (response) => {
-  //       this.recipes$ = new Observable<Recipe[]>(observer => {
-  //         observer.next(response.searchResponse.hits);
-  //         observer.complete();
-  //       });
-  //     },
-  //     error: (err) => console.error(err),
-  //   });
-  // }
 
   recipes$: Observable<Recipe[]>;
   currentPage: number = 1;

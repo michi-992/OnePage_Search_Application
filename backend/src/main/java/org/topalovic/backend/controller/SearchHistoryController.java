@@ -30,4 +30,11 @@ public class SearchHistoryController {
         List<UserSearchItemsDTO> searchItemsByUser = searchHistoryService.getItemsGroupedByUsers();
         return ResponseEntity.ok(searchItemsByUser);
     }
+
+    @GetMapping("/userHistory/{username}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<SearchItem>> findByUser(@PathVariable("username")  String username) throws Exception {
+        List<SearchItem> searchItemsByUser = searchHistoryService.findByUserName(username);
+        return ResponseEntity.ok(searchItemsByUser);
+    }
 }
