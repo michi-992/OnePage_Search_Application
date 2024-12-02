@@ -3,7 +3,7 @@
 This project is a Maven-based parent project consisting of two child modules: a backend and a frontend.
 The backend is a Spring Boot (version 3.3.4) application with Spring Security integration.
 The frontend is built with Angular (version 18).
-The application provides a recipe search functionality that triggers an OpenSearch search and saves the search request in a PostgreSQL database.
+The application provides a recipe search functionality including filters and sorting that triggers an OpenSearch search and saves the search request in a PostgreSQL database.
 Additionally, the project includes a login, registration, homepage (search view), and admin view of all searches.
 
 ## Table of Contents
@@ -245,19 +245,23 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 
 - API Endpoints:
   - GET `/api/search-history/all`
-  - POST `/api/search-history/groupedByUser`
+  - GET `/api/search-history/groupedByUser`
+  - GET `/api/search-history/userHistory/{username}`
 - Steps:
-  - Users with the role 'ADMIN' can access these endpoints to retrieve the entire search history and grouped by user.
+  - Users with the role 'ADMIN' can access the first 2 endpoints to retrieve the entire search history (grouped by user).
+  - Users with role 'USER' and username defined in the Pathvaribale username can access the third endpoint to retrieve their own searchHistory.
 
 ### Recipe Search by Title & Search Items Management
 
 - API Endpoint:
   - POST `/api/search-request/search-by-text`
 - Steps:
-    - Users can search for recipes by title using the provided API endpoint.
-    - The query is done with AUTO-`fuzziness` and uses the `and`-operator.
+    - Users can search for recipes by title or description using the provided API endpoint.
+    - The query is done with AUTO-`fuzziness`.
+    - Minimum and maximum values can be provided for filtering via the numeric data (calories, sodium, fat, protein, rating) of the recipes.
+    - A sort field (numeric data) can be specified and a sort order of either 'asc' or 'desc'.
     - The search term(s) get(s) saved into the search history repository.
-    - The API endpoint returns all recipes that contain or are similar to the search term in their title.
+    - The API endpoint returns all recipes that contain or are similar to the search term in their title or description and fit the additional filters.
 
 - API Endpoint:
   - POST `api/search-request/search-by-calories`
@@ -318,9 +322,10 @@ The frontend will be available at http://localhost:4200, unless otherwise specif
 - Steps:
     - Navigate to the main page ('/').
     - Enter one or more search terms in the input field.
+    - Additionally, you can choose other sorting or filter values.
     - Click the "Search" button.
     - The search term will be added to the database and displayed in the user's search history.
-    - All recipes with a title containing the search term get displayed.
+    - All recipes with a title or description containing the search term and fitting the specified filter ranges get displayed.
 
 ### Admin View
 
